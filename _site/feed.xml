@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Yinhj Blog</title>
+    <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
+    <link>http://yhj167.github.io/</link>
+    <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sun, 28 Aug 2016 22:46:22 +0800</pubDate>
+    <lastBuildDate>Sun, 28 Aug 2016 22:46:22 +0800</lastBuildDate>
+    <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>终端下使用curl命令</title>
+        <description>&lt;p&gt;#前言&lt;/p&gt;
+
+&lt;p&gt;Yinhj 的 Blog 就这麽开通了。
+&lt;a href=&quot;#jump&quot;&gt;跳过废话&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2016年，Yinhj总算有个地方可以写点自己的东西了。&lt;/p&gt;
+
+&lt;p&gt;以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了网（诶）。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说很不好，实践中的一些思考过几天就忘了，没有积累。&lt;/p&gt;
+
+&lt;p&gt;花了周末两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现，个人还是喜欢jekyll，github上共享的模板很多，也很多教程。编辑博客用markdown脚本来写，编辑器有很多，我比较喜欢&lt;a href=&quot;http://typora.io&quot;&gt;Typora&lt;/a&gt;，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！&lt;/p&gt;
+
+&lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;##正文
+在mac os下，如何通过命令行来下载网络文件？如果你没有安装或wget命令，那么可以使用curl工具来达到我们的目的。&lt;/p&gt;
+
+&lt;p&gt;###curl命令参数：&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;curl ‘url地址’
+curl [选项] ‘url地址’
+curl -O ‘url’
+curl -L -O ‘url’
+curl -o output.file.name.here ‘url-here’
+curl -o foo.pdf ‘http://server1.cyberciti.biz/foo.pdf’
+####示例：
+从osetc.com服务器里下载test.rar文件：
+curl -o test.rar ‘http://www.osetc.com/test.rar。’
+选项 “-o”会将输出写入到指定的文件test.rar里&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;###在使用curl的时候也可以指定多个url，如下面的例子：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;curl -O http://server{1,2,3}.osetc.com/
+curl -O http://server{1,2,3}.osetc.com/test.pdf
+curl -O ftp://intranet.site.{us,uk,in}.google/reports/test[a-z].tar.gz&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        <pubDate>Sun, 28 Aug 2016 05:23:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/08/28/%E7%BB%88%E7%AB%AF%E4%B8%8B%E4%BD%BF%E7%94%A8curl%E5%91%BD%E4%BB%A4/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/08/28/%E7%BB%88%E7%AB%AF%E4%B8%8B%E4%BD%BF%E7%94%A8curl%E5%91%BD%E4%BB%A4/</guid>
+        
+        <category>IOS</category>
+        
+        <category>常用命令</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
