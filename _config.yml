@@ -4,7 +4,7 @@ SEOTitle: 殷华杰的博客 | Yinhj Blog
 header-img: img/home-bg-o.jpg
 email: yinhj062486@gmail.com, simba2010@qq.com
 description: "关于后端与架构、分布式与大数据 | 殷华杰，Web & 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。"
-keyword: “殷华杰, Yinhj殷华杰, Yinhj, 殷华杰的博客, Yinhj Blog, 博客, 个人网站, 互联网, 后端, 架构设计"
+keyword: "殷华杰, Yinhj殷华杰, Yinhj, 殷华杰的博客, Yinhj Blog, 博客, 个人网站, 互联网, 后端, 架构设计"
 url: "http://yhj167.github.io"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
 
@@ -69,24 +69,24 @@ ga_domain: yhj167.github.io
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: “写写代码，做做设计，看看世界。人生不止眼前的苟且，还有远方的风景。”
+sidebar-about-description: "写写代码，做做设计，看看世界。人生不止眼前的苟且，还有远方的风景。"
 sidebar-avatar: /img/author-head.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # Featured Tags
 featured-tags: true                     # whether or not using Feature-Tags
-featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
+featured-condition-size: 0              # A tag will be featured if the size of it is more than this condition value
 
 
 
 # Friends
 friends: [
     {
-        title: “sunxiaobiu”,
+        title: "sunxiaobiu",
         href: "http://sunxiaobiu.github.io"
     },{
-        title: “walken”,
-        href: "walken.github.io"
+        title: "walken",
+        href: "htpp://walken.github.io"
     }
 ]
