@@ -5,13 +5,13 @@
     <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
     <link>http://yhj167.github.io/</link>
     <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 28 Aug 2016 22:46:22 +0800</pubDate>
-    <lastBuildDate>Sun, 28 Aug 2016 22:46:22 +0800</lastBuildDate>
+    <pubDate>Mon, 29 Aug 2016 22:16:49 +0800</pubDate>
+    <lastBuildDate>Mon, 29 Aug 2016 22:16:49 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>终端下使用curl命令</title>
-        <description>&lt;p&gt;#前言&lt;/p&gt;
+        <description>&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
 
 &lt;p&gt;Yinhj 的 Blog 就这麽开通了。
 &lt;a href=&quot;#jump&quot;&gt;跳过废话&lt;/a&gt;&lt;/p&gt;
@@ -25,29 +25,42 @@
 &lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
 &lt;hr /&gt;
 
-&lt;p&gt;##正文
-在mac os下，如何通过命令行来下载网络文件？如果你没有安装或wget命令，那么可以使用curl工具来达到我们的目的。&lt;/p&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;正文&lt;/h2&gt;
+&lt;p&gt;在mac os下，如何通过命令行来下载网络文件？如果你没有安装或wget命令，那么可以使用curl工具来达到我们的目的。&lt;/p&gt;
 
-&lt;p&gt;###curl命令参数：&lt;/p&gt;
+&lt;h3 id=&quot;curl&quot;&gt;curl命令参数：&lt;/h3&gt;
+
 &lt;blockquote&gt;
-  &lt;p&gt;curl ‘url地址’
-curl [选项] ‘url地址’
-curl -O ‘url’
-curl -L -O ‘url’
-curl -o output.file.name.here ‘url-here’
-curl -o foo.pdf ‘http://server1.cyberciti.biz/foo.pdf’
-####示例：
-从osetc.com服务器里下载test.rar文件：
-curl -o test.rar ‘http://www.osetc.com/test.rar。’
-选项 “-o”会将输出写入到指定的文件test.rar里&lt;/p&gt;
+  &lt;p&gt;curl ‘url地址’&lt;/p&gt;
+
+  &lt;p&gt;curl [选项] ‘url地址’&lt;/p&gt;
+
+  &lt;p&gt;curl -O ‘url’&lt;/p&gt;
+
+  &lt;p&gt;curl -L -O ‘url’&lt;/p&gt;
+
+  &lt;p&gt;curl -o output.file.name.here ‘url-here’&lt;/p&gt;
+
+  &lt;p&gt;curl -o foo.pdf ‘http://server1.cyberciti.biz/foo.pdf’&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;###在使用curl的时候也可以指定多个url，如下面的例子：&lt;/p&gt;
+&lt;h4 id=&quot;section-2&quot;&gt;示例：&lt;/h4&gt;
+&lt;p&gt;从osetc.com服务器里下载test.rar文件：&lt;/p&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;curl -O http://server{1,2,3}.osetc.com/
-curl -O http://server{1,2,3}.osetc.com/test.pdf
-curl -O ftp://intranet.site.{us,uk,in}.google/reports/test[a-z].tar.gz&lt;/p&gt;
+  &lt;p&gt;curl -o test.rar ‘http://www.osetc.com/test.rar。’&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;选项 “-o”会将输出写入到指定的文件test.rar里&lt;/p&gt;
+
+&lt;h4 id=&quot;curlurl&quot;&gt;在使用curl的时候也可以指定多个url，如下面的例子：&lt;/h4&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;curl -O http://server{1,2,3}.osetc.com/&lt;/p&gt;
+
+  &lt;p&gt;curl -O http://server{1,2,3}.osetc.com/test.pdf&lt;/p&gt;
+
+  &lt;p&gt;curl -O ftp://intranet.site.{us,uk,in}.google/reports/test[a-z].tar.gz&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
         <pubDate>Sun, 28 Aug 2016 05:23:00 +0800</pubDate>
