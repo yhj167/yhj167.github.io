@@ -5,8 +5,8 @@
     <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
     <link>http://yhj167.github.io/</link>
     <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 16 Oct 2016 00:19:25 +0800</pubDate>
-    <lastBuildDate>Sun, 16 Oct 2016 00:19:25 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Oct 2016 00:31:59 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Oct 2016 00:31:59 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -282,6 +282,20 @@
   &lt;p&gt;git push -u origin master&lt;/p&gt;
 &lt;/blockquote&gt;
 
+&lt;h3 id=&quot;git-1&quot;&gt;Git回退到某个历史版本&lt;/h3&gt;
+
+&lt;p&gt;1.使用Git log命令查看所有的历史版本，获取某个历史版本的id，假设查到历史版本的id。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git reset –hard id&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;2.把修改推到远程服务器&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git push -f -u origin master&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;hr /&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;例子&lt;/h3&gt;
@@ -364,21 +378,7 @@ git push -u origin master
     
       <item>
         <title>博客语言——Markdown语法说明</title>
-        <description>&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
-
-&lt;p&gt;Yinhj 的 Blog 就这麽开通了。
-&lt;a href=&quot;#jump&quot;&gt;跳过前言&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2016年，Yinhj总算有个地方可以写点自己的东西了。&lt;/p&gt;
-
-&lt;p&gt;以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。&lt;/p&gt;
-
-&lt;p&gt;于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，&lt;a href=&quot;http://jekyllthemes.org&quot;&gt;jekyllthemes&lt;/a&gt;上供下载的模板很多，&lt;a href=&quot;https://www.zhihu.com/question/20223939&quot;&gt;知乎&lt;/a&gt;上分享的模板也很多。编辑博客用markdown脚本来写(&lt;a href=&quot;http://wowubuntu.com/markdown/#list&quot;&gt;详细教程&lt;/a&gt;)，编辑器有很多，我比较喜欢&lt;a href=&quot;http://typora.io&quot;&gt;Typora&lt;/a&gt;，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！&lt;/p&gt;
-
-&lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;段落、标题、区块代码&lt;/h3&gt;
+        <description>&lt;h3 id=&quot;section&quot;&gt;段落、标题、区块代码&lt;/h3&gt;
 
 &lt;p&gt;一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 tab，那该行也会被视为空行），一般的段落不需要用空白或换行缩进。&lt;/p&gt;
 
@@ -427,7 +427,7 @@ dog's back.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;修辞和强调&lt;/h4&gt;
+&lt;h4 id=&quot;section-1&quot;&gt;修辞和强调&lt;/h4&gt;
 
 &lt;p&gt;Markdown 使用星号和底线来标记需要强调的区段。&lt;/p&gt;
 
@@ -449,7 +449,7 @@ Some of these words &lt;em&gt;are emphasized also&lt;/em&gt;.&lt;/p&gt;
 Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&quot;section-3&quot;&gt;列表&lt;/h3&gt;
+&lt;h3 id=&quot;section-2&quot;&gt;列表&lt;/h3&gt;
 
 &lt;p&gt;无序列表使用星号、加号和减号来做为列表的项目标记，这些符号是都可以使用的，使用星号：&lt;/p&gt;
 
@@ -523,7 +523,7 @@ Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;
 &lt;/ul&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-4&quot;&gt;链接&lt;/h4&gt;
+&lt;h4 id=&quot;section-3&quot;&gt;链接&lt;/h4&gt;
 
 &lt;p&gt;Markdown 支援两种形式的链接语法： 行内 和 参考 两种形式，两种都是使用角括号来把文字转成连结。&lt;/p&gt;
 
@@ -586,7 +586,7 @@ I start my morning with a cup of coffee and
 &lt;a href=&quot;http://www.nytimes.com/&quot;&gt;The New York Times&lt;/a&gt;.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-5&quot;&gt;图片&lt;/h4&gt;
+&lt;h4 id=&quot;section-4&quot;&gt;图片&lt;/h4&gt;
 
 &lt;p&gt;图片的语法和链接很像。&lt;/p&gt;
 
@@ -610,7 +610,7 @@ I start my morning with a cup of coffee and
 &lt;img src=&quot;/path/to/img.jpg&quot; alt=&quot;alt text&quot; title=&quot;Title&quot; /&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&quot;section-6&quot;&gt;代码&lt;/h4&gt;
+&lt;h4 id=&quot;section-5&quot;&gt;代码&lt;/h4&gt;
 
 &lt;p&gt;在一般的段落文字中，你可以使用反引号 ` 来标记代码区段，区段内的 &amp;amp;、&amp;lt; 和 &amp;gt; 都会被自动的转换成 HTML 实体，这项特性让你可以很容易的在代码区段内插入 HTML 码：&lt;/p&gt;
 
@@ -646,7 +646,28 @@ I start my morning with a cup of coffee and
     
       <item>
         <title>在github上用jekyll搭建博客</title>
-        <description>&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/u014015972/article/details/50497254&quot;&gt;参考资料&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;Yinhj 的 Blog 就这麽开通了。
+&lt;a href=&quot;#jump&quot;&gt;跳过前言&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2016年，Yinhj总算有个地方可以写点自己的东西了。&lt;/p&gt;
+
+&lt;p&gt;以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。&lt;/p&gt;
+
+&lt;p&gt;于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，&lt;a href=&quot;http://jekyllthemes.org&quot;&gt;jekyllthemes&lt;/a&gt;上供下载的模板很多，&lt;a href=&quot;https://www.zhihu.com/question/20223939&quot;&gt;知乎&lt;/a&gt;上分享的模板也很多。编辑博客用markdown脚本来写(&lt;a href=&quot;http://wowubuntu.com/markdown/#list&quot;&gt;详细教程&lt;/a&gt;)，编辑器有很多，我比较喜欢&lt;a href=&quot;http://typora.io&quot;&gt;Typora&lt;/a&gt;，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！&lt;/p&gt;
+
+&lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;参考资料&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/u014015972/article/details/50497254&quot;&gt;用github + Jekyll写博客&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.jianshu.com/p/07064eb79740&quot;&gt;Mac下Jekyll安装&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.ituring.com.cn/article/114888&quot;&gt;Jekyll+多说，建立属于你的轻博客&lt;/a&gt;&lt;/p&gt;
+
 </description>
         <pubDate>Thu, 28 Jul 2016 04:20:00 +0800</pubDate>
         <link>http://yhj167.github.io/2016/07/28/%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</link>
