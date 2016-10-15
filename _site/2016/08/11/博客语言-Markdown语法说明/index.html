@@ -452,73 +452,24 @@ I start my morning with a cup of coffee and
 
 <p>在一般的段落文字中，你可以使用反引号 ` 来标记代码区段，区段内的 &amp;、&lt; 和 &gt; 都会被自动的转换成 HTML 实体，这项特性让你可以很容易的在代码区段内插入 HTML 码：</p>
 
-<pre><code>
-<p>I strongly recommend against using any
-<code>&lt;blink&gt;</code> tags.</p>
-<p>I wish SmartyPants used named entities like
-<code>&amp;mdash;</code> instead of decimal-encoded
-entites like <code>&amp;#8212;</code>.</p>
-</code></pre>
+<blockquote>
+  <p>I strongly recommend against using any <code class="highlighter-rouge">&lt;blink&gt;</code> tags.</p>
+
+  <p>I wish SmartyPants used named entities like <code class="highlighter-rouge">&amp;mdash;</code> instead of decimal-encoded entites like <code class="highlighter-rouge">&amp;#8212;</code>.</p>
+</blockquote>
 
 <p>如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;、&lt; 和 &gt; 也一样会自动转成 HTML 实体。</p>
 
 <p>Markdown 语法:</p>
 
-<pre><code>
-If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:
-
 <blockquote>
+  <p>If you want your page to validate under XHTML 1.0 Strict, you’ve got to put paragraph tags in your blockquotes:</p>
+
+  <blockquote>
 <p>For example.</p>
 </blockquote>
-</code></pre>
-
-<p>输出 HTML 为：</p>
-
-<pre><code>
-<p>If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:</p>
-<pre><code>&lt;blockquote&gt;
-&lt;p&gt;For example.&lt;/p&gt;
-&lt;/blockquote&gt;
-</code></pre>
-
-</code></pre>
-
-<p>输出 HTML 为：</p>
-
-<pre><code>
-<p>I strongly recommend against using any
-<code>&lt;blink&gt;</code> tags.</p>
-<p>I wish SmartyPants used named entities like
-<code>&amp;mdash;</code> instead of decimal-encoded
-entites like <code>&amp;#8212;</code>.</p>
-</code></pre>
-
-<p>如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;、&lt; 和 &gt; 也一样会自动转成 HTML 实体。</p>
-
-<p>Markdown 语法:</p>
-
-<pre><code>
-If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:
-
-<blockquote>
-<p>For example.</p>
 </blockquote>
-</code></pre>
 
-<p>输出 HTML 为：</p>
-
-<pre><code>
-<p>If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:</p>
-<pre><code>&lt;blockquote&gt;
-&lt;p&gt;For example.&lt;/p&gt;
-&lt;/blockquote&gt;
-</code></pre>
-
-</code></pre>
 
 
                 <hr>

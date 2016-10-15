@@ -5,8 +5,8 @@
     <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
     <link>http://yhj167.github.io/</link>
     <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 15 Oct 2016 17:58:57 +0800</pubDate>
-    <lastBuildDate>Sat, 15 Oct 2016 17:58:57 +0800</lastBuildDate>
+    <pubDate>Sun, 16 Oct 2016 00:19:25 +0800</pubDate>
+    <lastBuildDate>Sun, 16 Oct 2016 00:19:25 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -156,7 +156,148 @@
     
       <item>
         <title>Git常用命令(持续更新中)</title>
-        <description>
+        <description>&lt;h3 id=&quot;git&quot;&gt;取得Git仓库&lt;/h3&gt;
+
+&lt;p&gt;初始化一个版本仓库&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git init&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Clone远程版本库&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git clone https://github.com/yhj167/yhj167.github.io.git&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;添加远程版本库origin，语法为 git remote add [shortname] [url]&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git remote add origin https://github.com/yhj167/yhj167.github.io.git&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;查看远程仓库&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git remote -v&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;提交你的修改&lt;/h3&gt;
+
+&lt;p&gt;添加当前修改的文件到暂存区&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git add .&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;添加所有修改的文件到暂存区&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git add -A&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;提交你的修改&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git commit –m “你的注释”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;推送你的更新到远程服务器,语法为 git push [远程名] [本地分支]:[远程分支]&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git push origin master&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;查看文件状态&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git status&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;从当前跟踪列表移除文件，并完全删除&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git rm readme.txt&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;仅在暂存区删除，保留文件在当前目录，不再跟踪&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git rm –cached readme.txt&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;重命名文件&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git mv reademe.txt readme&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;查看提交的历史记录&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git log&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;取消对文件的修改&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git checkout –- readme.txt&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;基本的分支管理&lt;/h3&gt;
+
+&lt;p&gt;拉去远程仓库的数据，语法为 git fetch [remote-name]&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git fetch&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;fetch 会拉取最新的远程仓库数据，但不会自动到当前目录下，要自动合并&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git pull&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;查看远程仓库的信息&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git remote show origin&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;push所有分支&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git push&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;将本地主分支推到远程主分支&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git push origin master&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;将本地主分支推到远程(如无远程主分支则创建，客户端首次提交)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;git push -u origin master&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;例子&lt;/h3&gt;
+
+&lt;p&gt;首次创建git库&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo &quot;# hyaojia.github.io&quot; &amp;gt;&amp;gt; README.md
+git init
+git add README.md
+git commit -m &quot;first commit&quot;
+git remote add origin https://github.com/hyaojia/hyaojia.github.io.git
+git push -u origin master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://xbc.me/git-commands/&quot;&gt;参考资料&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 12 Sep 2016 04:10:00 +0800</pubDate>
         <link>http://yhj167.github.io/2016/09/12/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/</link>
@@ -473,73 +614,24 @@ I start my morning with a cup of coffee and
 
 &lt;p&gt;在一般的段落文字中，你可以使用反引号 ` 来标记代码区段，区段内的 &amp;amp;、&amp;lt; 和 &amp;gt; 都会被自动的转换成 HTML 实体，这项特性让你可以很容易的在代码区段内插入 HTML 码：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;
-&lt;p&gt;I strongly recommend against using any
-&lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
-&lt;p&gt;I wish SmartyPants used named entities like
-&lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
-entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;I strongly recommend against using any &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
+
+  &lt;p&gt;I wish SmartyPants used named entities like &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded entites like &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;amp;、&amp;lt; 和 &amp;gt; 也一样会自动转成 HTML 实体。&lt;/p&gt;
 
 &lt;p&gt;Markdown 语法:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;
-If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:
-
 &lt;blockquote&gt;
+  &lt;p&gt;If you want your page to validate under XHTML 1.0 Strict, you’ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
+
+  &lt;blockquote&gt;
 &lt;p&gt;For example.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;输出 HTML 为：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
-&amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
-&amp;lt;/blockquote&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;输出 HTML 为：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-&lt;p&gt;I strongly recommend against using any
-&lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
-&lt;p&gt;I wish SmartyPants used named entities like
-&lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
-entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;amp;、&amp;lt; 和 &amp;gt; 也一样会自动转成 HTML 实体。&lt;/p&gt;
-
-&lt;p&gt;Markdown 语法:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:
-
-&lt;blockquote&gt;
-&lt;p&gt;For example.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;输出 HTML 为：&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;
-&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
-you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
-&amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
-&amp;lt;/blockquote&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
 </description>
         <pubDate>Thu, 11 Aug 2016 05:10:00 +0800</pubDate>
         <link>http://yhj167.github.io/2016/08/11/%E5%8D%9A%E5%AE%A2%E8%AF%AD%E8%A8%80-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/</link>
@@ -554,7 +646,7 @@ you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
     
       <item>
         <title>在github上用jekyll搭建博客</title>
-        <description>
+        <description>&lt;p&gt;&lt;a href=&quot;http://blog.csdn.net/u014015972/article/details/50497254&quot;&gt;参考资料&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 28 Jul 2016 04:20:00 +0800</pubDate>
         <link>http://yhj167.github.io/2016/07/28/%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</link>

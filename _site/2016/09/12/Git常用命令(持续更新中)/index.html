@@ -202,7 +202,148 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				
+				<h3 id="git">取得Git仓库</h3>
+
+<p>初始化一个版本仓库</p>
+
+<blockquote>
+  <p>git init</p>
+</blockquote>
+
+<p>Clone远程版本库</p>
+
+<blockquote>
+  <p>git clone https://github.com/yhj167/yhj167.github.io.git</p>
+</blockquote>
+
+<p>添加远程版本库origin，语法为 git remote add [shortname] [url]</p>
+
+<blockquote>
+  <p>git remote add origin https://github.com/yhj167/yhj167.github.io.git</p>
+</blockquote>
+
+<p>查看远程仓库</p>
+
+<blockquote>
+  <p>git remote -v</p>
+</blockquote>
+
+<h3 id="section">提交你的修改</h3>
+
+<p>添加当前修改的文件到暂存区</p>
+
+<blockquote>
+  <p>git add .</p>
+</blockquote>
+
+<p>添加所有修改的文件到暂存区</p>
+
+<blockquote>
+  <p>git add -A</p>
+</blockquote>
+
+<p>提交你的修改</p>
+
+<blockquote>
+  <p>git commit –m “你的注释”</p>
+</blockquote>
+
+<p>推送你的更新到远程服务器,语法为 git push [远程名] [本地分支]:[远程分支]</p>
+
+<blockquote>
+  <p>git push origin master</p>
+</blockquote>
+
+<p>查看文件状态</p>
+
+<blockquote>
+  <p>git status</p>
+</blockquote>
+
+<p>从当前跟踪列表移除文件，并完全删除</p>
+
+<blockquote>
+  <p>git rm readme.txt</p>
+</blockquote>
+
+<p>仅在暂存区删除，保留文件在当前目录，不再跟踪</p>
+
+<blockquote>
+  <p>git rm –cached readme.txt</p>
+</blockquote>
+
+<p>重命名文件</p>
+
+<blockquote>
+  <p>git mv reademe.txt readme</p>
+</blockquote>
+
+<p>查看提交的历史记录</p>
+
+<blockquote>
+  <p>git log</p>
+</blockquote>
+
+<p>取消对文件的修改</p>
+
+<blockquote>
+  <p>git checkout –- readme.txt</p>
+</blockquote>
+
+<h3 id="section-1">基本的分支管理</h3>
+
+<p>拉去远程仓库的数据，语法为 git fetch [remote-name]</p>
+
+<blockquote>
+  <p>git fetch</p>
+</blockquote>
+
+<p>fetch 会拉取最新的远程仓库数据，但不会自动到当前目录下，要自动合并</p>
+
+<blockquote>
+  <p>git pull</p>
+</blockquote>
+
+<p>查看远程仓库的信息</p>
+
+<blockquote>
+  <p>git remote show origin</p>
+</blockquote>
+
+<p>push所有分支</p>
+
+<blockquote>
+  <p>git push</p>
+</blockquote>
+
+<p>将本地主分支推到远程主分支</p>
+
+<blockquote>
+  <p>git push origin master</p>
+</blockquote>
+
+<p>将本地主分支推到远程(如无远程主分支则创建，客户端首次提交)</p>
+
+<blockquote>
+  <p>git push -u origin master</p>
+</blockquote>
+
+<hr />
+
+<h3 id="section-2">例子</h3>
+
+<p>首次创建git库</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo "# hyaojia.github.io" &gt;&gt; README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/hyaojia/hyaojia.github.io.git
+git push -u origin master
+</code></pre>
+</div>
+
+<p><a href="https://xbc.me/git-commands/">参考资料</a></p>
 
 
                 <hr>
@@ -216,8 +357,18 @@
                     data-title="Git常用命令(持续更新中)"
                     data-url="http://yhj167.github.io/2016/09/12/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/"
                     data-images="http://yhj167.github.io/img/post-bg-re-vs-ng2.jpg"
-                    data-content="
- | 殷华杰的博客 | Yinhj Blog " >
+                    data-content="取得Git仓库
+
+初始化一个版本仓库
+
+
+  git init
+
+
+Clone远程版本库
+
+
+  git clone https://github.com... | 殷华杰的博客 | Yinhj Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
