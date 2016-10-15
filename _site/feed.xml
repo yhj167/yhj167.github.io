@@ -5,28 +5,173 @@
     <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
     <link>http://yhj167.github.io/</link>
     <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 30 Aug 2016 23:15:47 +0800</pubDate>
-    <lastBuildDate>Tue, 30 Aug 2016 23:15:47 +0800</lastBuildDate>
+    <pubDate>Sat, 15 Oct 2016 17:58:57 +0800</pubDate>
+    <lastBuildDate>Sat, 15 Oct 2016 17:58:57 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>终端下使用curl命令</title>
-        <description>&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
+        <title>块文件系统BUG引起的系统复位问题归零报告</title>
+        <description>&lt;h3 id=&quot;section&quot;&gt;故障现象&lt;/h3&gt;
 
-&lt;p&gt;Yinhj 的 Blog 就这麽开通了。
-&lt;a href=&quot;#jump&quot;&gt;跳过废话&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;着陆时，MCU收集MFL数据并转发给VCM，由VCM存储到IDR记录卡。在MCU开始发送MFL数据9秒左右时，VCM复位。&lt;/p&gt;
 
-&lt;p&gt;2016年，Yinhj总算有个地方可以写点自己的东西了。&lt;/p&gt;
-
-&lt;p&gt;以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了网（诶）。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说很不好，实践中的一些思考过几天就忘了，没有积累。&lt;/p&gt;
-
-&lt;p&gt;花了周末两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现，个人还是喜欢jekyll，github上共享的模板很多，也很多教程。编辑博客用markdown脚本来写，编辑器有很多，我比较喜欢&lt;a href=&quot;http://typora.io&quot;&gt;Typora&lt;/a&gt;，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！&lt;/p&gt;
-
-&lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;正文&lt;/h2&gt;
-&lt;p&gt;在mac os下，如何通过命令行来下载网络文件？如果你没有安装或wget命令，那么可以使用curl工具来达到我们的目的。&lt;/p&gt;
+&lt;h3 id=&quot;section-1&quot;&gt;故障定位&lt;/h3&gt;
+
+&lt;p&gt;测试发现，通过MCU端手动向双口长时间地周期（2个tick）写MFL数据，必然会导致VCM复位，有时候复位前会打印program和data access错误，有时候直接复位。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;分析可能出现的几种复位方式：&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;应用监控的任务挂起，引起的手动开门狗复位；&lt;/li&gt;
+  &lt;li&gt;应用执行了非法指令、地址寻址错误、除数为0等，导致CPU死机无法喂狗，引起开门狗复位；&lt;/li&gt;
+  &lt;li&gt;应用中断异常，导致引起CPU热复位。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试1：在VCM监控任务中，将任务挂起手动停止喂狗功能注释掉。&lt;/p&gt;
+
+    &lt;p&gt;结果：VCM还是会出现复位，排除第1种复位。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试2：在VCM应用中禁掉看门狗。&lt;/p&gt;
+
+    &lt;p&gt;结果：VCM有时还是会复位，有时会死机。说明VCM既会热复位，又会看门狗复位。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们知道vxworks5.5的没有用户态，用户没有自己的地址空间，非常不安全。所以应用访问异常的地址空间，很可能导致执行非法指令或寻址错误；甚至可能会导致中断异常而reboot。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;从数据流的过程分析可能引起复位的原因：&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;VCM和MCU的双口通信在数据量增大时是否可能访问数据越界。&lt;/li&gt;
+  &lt;li&gt;VCM从双口取出数据存入本地缓存，写盘时从缓存中取数据，存取数据是否出错。&lt;/li&gt;
+  &lt;li&gt;VCM写盘是否出错。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试3：在VCM应用中，屏蔽从双口读取MFL数据，以相同的数据流量仿真MFL数据，放入本地的MFL缓存中，VCM按原来的方式从缓存中取数据写盘。&lt;/p&gt;
+
+    &lt;p&gt;结果：VCM还是会出现复位，排除MCU和VCM的双口通信问题，同时也将问题定位到了VCM端。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试4：打印存放MFL的当前扇区的有效字节数oddment(即偏移量)、缓存中取出的数据长度getlen、块数blocknum。取数据和写盘的代码如下：&lt;/p&gt;
+
+    &lt;blockquote&gt;
+      &lt;p&gt;blocknum = nbforng/512;	//nbforng为本地缓存中数据字节数&lt;/p&gt;
+
+      &lt;p&gt;if(blocknum == 0) blocknum = 2;&lt;/p&gt;
+
+      &lt;p&gt;ldrs_rawFsGetWrtBuf(fd, WRITE_LEN_MAX, &amp;amp;oddment);	//获取块文件系统写数据存放缓冲区&lt;/p&gt;
+
+      &lt;p&gt;getlen = getdatafromrngbuf(rngid, semid, buf, (512*blocknum)-oddment);	//从缓存中取数据&lt;/p&gt;
+
+      &lt;p&gt;… …&lt;/p&gt;
+
+      &lt;p&gt;idrs_rawFsWrite(fd, dataidx, buf, getlen);		//写盘&lt;/p&gt;
+    &lt;/blockquote&gt;
+
+    &lt;p&gt;结果：发现打印的当前扇区有效字节数oddment出现大于512的情况，然而一个扇区最大为512字节。所以，&lt;strong&gt;当oddment&amp;gt;512，且512&amp;lt;nbforng&amp;lt;1024时，会出现blocknum等于1，(512*blocknum)-oddment)&amp;lt;0的情况，导致取数据的长度&amp;lt;0&lt;/strong&gt;。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试5：在串口中测试rngBufGet(MFL_ringid, buf, -1)，从MFL_ringid缓存中取-1长度的数据，会导致应用程序复位。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;故障原因&lt;/h3&gt;
+
+&lt;p&gt;VCM应用程序为了减少写盘次数，每次写盘都会凑512*blocknum字节的数据量，即凑完整的扇区来写盘。例如，缓存中数据量nbforng为1100字节，扇区偏移量oddment为124，则blocknum为2，算出实际写盘数据量为(512xblocknum)-oddment = 900字节，剩下的1100-900 = 200字节数据等下次写盘时再写。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一种异常情况，当环形缓存中数据量&amp;lt;512字节，即blocknum等于0时，取数据长度(512*blocknum)-oddment)为负值。应用对0值做了处理：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;if(blocknum == 0) blocknum = 2;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;当环形缓存中数据量在512～1024字节范围，即blocknum等于1时，取数据长度(512*blocknum)-oddment)正常情况下为&amp;gt;=0，但实际oddment出现了&amp;gt;512的情况。因为当数据区通道数&amp;gt;1时，计算扇区偏移量oddment会加上14个字节的帧头，所以oddment的范围变为14～526了。&lt;/p&gt;
+
+    &lt;p&gt;当oddment&amp;gt;512，且512&amp;lt;nbforng&amp;lt;1024，即blocknum等于1时，(512*blocknum)-oddment)&amp;lt;0，导致调用vxworks系统函数rngBufGet取数据时长度&amp;lt;0，CPU死机引起VCM应用程序复位。&lt;/p&gt;
+
+    &lt;p&gt;那么，其他数据是否会引起同样的故障：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;LOG的数据区通道数为1且数据量小，oddment不会加14字节的帧头，oddment不会越界&amp;gt;512；&lt;/li&gt;
+      &lt;li&gt;音视频正常数据量大，blocknum = nbforng/512，blocknum&amp;gt;2，而blocknum只有为1才会导致异常，所以基本不会引起异常；&lt;/li&gt;
+      &lt;li&gt;电子战EW/武器BUS/飞参FPA/BM总线数据的正常数据量&amp;lt;512字节，blocknum为0，所以基本不会引起异常；&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;测试6：同时，测试在vxworks6.8系统下，调用rngBufGet函数取负值长度的数据返回-1，但不会引起CPU死机。而10C使用的是vxworks6.8系统，并且没有采用这种凑512*blocknum字节数据量写盘的方式，所以10C不会出现这样的故障。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;解决方案&lt;/h3&gt;
+
+&lt;p&gt;块文件系统中判断逻辑，当数据区通道数&amp;gt;1时，写盘会增加14个字节，其中8个字节帧头，6个字节帧尾。而应用计算从本地缓存中可取数据量时，不包括这14字节（因为这是文件系统驱动中加的），所以为了留出14个字节，偏移量oddment计算时加上了14个字节：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;oddment = 14字节帧头帧尾 + 当前扇区实际偏移量oddment_actual;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;为了写扇区时凑完整的扇区，从缓存中取(blocknum*512)-oddment字节的数据，如下：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;//从缓存中取数据&lt;/p&gt;
+
+  &lt;p&gt;getlen = getdatafromrngbuf(rngid, semid, buf, (blocknum*512)-oddment);&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;因为扇区偏移量oddment并非实际偏移量，其范围为14～526，可能导致(blocknum*512)-oddment为负值。所以，计算oddment时，得出的结果后面加一句：&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;*oddment = *oddment%512;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;使得扇区偏移量范围在0～512字节之间。&lt;/p&gt;
+
+&lt;p&gt;例如：缓存中数据量nbforng为600字节，实际偏移量oddment_actual为500字节时，计算oddment ＝ (500+14)%512 = 2，blocknum = nbforng/512 = 1，(blocknum*512)-oddment = 510。从缓存中取510字节，剩下600-510=90字节下次再写。实际写盘数据量为510+14=524字节，从扇区实际偏移量oddment_actual为500开始写，刚好写满下个扇区。&lt;/p&gt;
+</description>
+        <pubDate>Sat, 15 Oct 2016 04:00:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/10/15/%E5%9D%97%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9FBUG%E5%BC%95%E8%B5%B7%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%A4%8D%E4%BD%8D%E9%97%AE%E9%A2%98%E5%BD%92%E9%9B%B6%E6%8A%A5%E5%91%8A/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/10/15/%E5%9D%97%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9FBUG%E5%BC%95%E8%B5%B7%E7%9A%84%E7%B3%BB%E7%BB%9F%E5%A4%8D%E4%BD%8D%E9%97%AE%E9%A2%98%E5%BD%92%E9%9B%B6%E6%8A%A5%E5%91%8A/</guid>
+        
+        <category>嵌入式</category>
+        
+        <category>文件系统</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Git常用命令(持续更新中)</title>
+        <description>
+</description>
+        <pubDate>Mon, 12 Sep 2016 04:10:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/09/12/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/09/12/Git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/</guid>
+        
+        <category>git</category>
+        
+        <category>常用命令</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>OSX命令(持续更新中)</title>
+        <description>&lt;p&gt;在mac os下，如何通过命令行来下载网络文件？如果你没有安装或wget命令，那么可以使用curl工具来达到我们的目的。&lt;/p&gt;
 
 &lt;h3 id=&quot;curl&quot;&gt;curl命令参数：&lt;/h3&gt;
 
@@ -44,7 +189,7 @@
   &lt;p&gt;curl -o foo.pdf ‘http://server1.cyberciti.biz/foo.pdf’&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;示例：&lt;/h4&gt;
+&lt;h4 id=&quot;section&quot;&gt;示例：&lt;/h4&gt;
 &lt;p&gt;从osetc.com服务器里下载test.rar文件：&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -63,13 +208,361 @@
   &lt;p&gt;curl -O ftp://intranet.site.{us,uk,in}.google/reports/test[a-z].tar.gz&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
-        <pubDate>Sun, 28 Aug 2016 05:23:00 +0800</pubDate>
-        <link>http://yhj167.github.io/2016/08/28/%E7%BB%88%E7%AB%AF%E4%B8%8B%E4%BD%BF%E7%94%A8curl%E5%91%BD%E4%BB%A4/</link>
-        <guid isPermaLink="true">http://yhj167.github.io/2016/08/28/%E7%BB%88%E7%AB%AF%E4%B8%8B%E4%BD%BF%E7%94%A8curl%E5%91%BD%E4%BB%A4/</guid>
+        <pubDate>Sun, 28 Aug 2016 05:20:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/08/28/OSX%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/08/28/OSX%E5%91%BD%E4%BB%A4(%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%E4%B8%AD)/</guid>
         
-        <category>IOS</category>
+        <category>操作系统</category>
+        
+        <category>OSX</category>
         
         <category>常用命令</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>博客语言——Markdown语法说明</title>
+        <description>&lt;h2 id=&quot;section&quot;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;Yinhj 的 Blog 就这麽开通了。
+&lt;a href=&quot;#jump&quot;&gt;跳过前言&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2016年，Yinhj总算有个地方可以写点自己的东西了。&lt;/p&gt;
+
+&lt;p&gt;以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。&lt;/p&gt;
+
+&lt;p&gt;于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，&lt;a href=&quot;http://jekyllthemes.org&quot;&gt;jekyllthemes&lt;/a&gt;上供下载的模板很多，&lt;a href=&quot;https://www.zhihu.com/question/20223939&quot;&gt;知乎&lt;/a&gt;上分享的模板也很多。编辑博客用markdown脚本来写(&lt;a href=&quot;http://wowubuntu.com/markdown/#list&quot;&gt;详细教程&lt;/a&gt;)，编辑器有很多，我比较喜欢&lt;a href=&quot;http://typora.io&quot;&gt;Typora&lt;/a&gt;，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！&lt;/p&gt;
+
+&lt;p id=&quot;jump&quot;&gt;&lt;/p&gt;
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;段落、标题、区块代码&lt;/h3&gt;
+
+&lt;p&gt;一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 tab，那该行也会被视为空行），一般的段落不需要用空白或换行缩进。&lt;/p&gt;
+
+&lt;p&gt;Markdown 支持两种标题的语法，Setext 和 atx 形式。Setext 形式是用底线的形式，利用 = （最高阶标题）和 - （第二阶标题），Atx 形式在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶。&lt;/p&gt;
+
+&lt;p&gt;区块引用则使用 email 形式的 ‘&amp;gt;’ 角括号。&lt;/p&gt;
+
+&lt;p&gt;Markdown 语法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+A First Level Header
+====================
+A Second Level Header
+---------------------
+
+Now is the time for all good men to come to
+the aid of their country. This is just a
+regular paragraph.
+
+The quick brown fox jumped over the lazy
+dog's back.
+### Header 3
+
+&amp;gt; This is a blockquote.
+&amp;gt; 
+&amp;gt; This is the second paragraph in the blockquote.
+&amp;gt;
+&amp;gt; ## This is an H2 in a blockquote
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;h1&gt;A First Level Header&lt;/h1&gt;
+&lt;h2&gt;A Second Level Header&lt;/h2&gt;
+&lt;p&gt;Now is the time for all good men to come to
+the aid of their country. This is just a
+regular paragraph.&lt;/p&gt;
+&lt;p&gt;The quick brown fox jumped over the lazy
+dog's back.&lt;/p&gt;
+&lt;h3&gt;Header 3&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a blockquote.&lt;/p&gt;
+&lt;p&gt;This is the second paragraph in the blockquote.&lt;/p&gt;
+&lt;h2&gt;This is an H2 in a blockquote&lt;/h2&gt;
+&lt;/blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-2&quot;&gt;修辞和强调&lt;/h4&gt;
+
+&lt;p&gt;Markdown 使用星号和底线来标记需要强调的区段。&lt;/p&gt;
+
+&lt;p&gt;Markdown 语法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+Some of these words *are emphasized*.
+Some of these words _are emphasized also_.
+Use two asterisks for **strong emphasis**.
+Or, if you prefer, __use two underscores instead__.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;Some of these words &lt;em&gt;are emphasized&lt;/em&gt;.
+Some of these words &lt;em&gt;are emphasized also&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Use two asterisks for &lt;strong&gt;strong emphasis&lt;/strong&gt;.
+Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;列表&lt;/h3&gt;
+
+&lt;p&gt;无序列表使用星号、加号和减号来做为列表的项目标记，这些符号是都可以使用的，使用星号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+* Candy.
+* Gum.
+* Booze.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;加号：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
++ Candy.
++ Gum.
++ Booze.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;和减号&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+- Candy.
+- Gum.
+- Booze.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;都会输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;ul&gt;
+&lt;li&gt;Candy.&lt;/li&gt;
+&lt;li&gt;Gum.&lt;/li&gt;
+&lt;li&gt;Booze.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有序的列表则是使用一般的数字接着一个英文句点作为项目标记：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+1. Red
+2. Green
+3. Blue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;ol&gt;
+&lt;li&gt;Red&lt;/li&gt;
+&lt;li&gt;Green&lt;/li&gt;
+&lt;li&gt;Blue&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果你在项目之间插入空行，那项目的内容会用 &amp;lt;p&amp;gt; 包起来，你也可以在一个项目内放上多个段落，只要在它前面缩排 4 个空白或 1 个 tab 。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+* A list item.
+
+    With multiple paragraphs.
+
+* Another item in the list.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;A list item.&lt;/p&gt;
+&lt;p&gt;With multiple paragraphs.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Another item in the list.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;链接&lt;/h4&gt;
+
+&lt;p&gt;Markdown 支援两种形式的链接语法： 行内 和 参考 两种形式，两种都是使用角括号来把文字转成连结。&lt;/p&gt;
+
+&lt;p&gt;行内形式是直接在后面用括号直接接上链接：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+This is an [example link](http://example.com/).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;This is an &lt;a href=&quot;http://example.com/&quot;&gt;
+example link&lt;/a&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;你也可以选择性的加上 title 属性：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+This is an [example link](http://example.com/ &quot;With a Title&quot;).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;This is an &lt;a href=&quot;http://example.com/&quot; title=&quot;With a Title&quot;&gt;
+example link&lt;/a&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考形式的链接让你可以为链接定一个名称，之后你可以在文件的其他地方定义该链接的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+I get 10 times more traffic from [Google][1] than from
+[Yahoo][2] or [MSN][3].
+
+[1]: http://google.com/ &quot;Google&quot;
+[2]: http://search.yahoo.com/ &quot;Yahoo Search&quot;
+[3]: http://search.msn.com/ &quot;MSN Search&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;I get 10 times more traffic from &lt;a href=&quot;http://google.com/&quot; title=&quot;Google&quot;&gt;Google&lt;/a&gt; than from &lt;a href=&quot;http://search.yahoo.com/&quot; title=&quot;Yahoo Search&quot;&gt;Yahoo&lt;/a&gt; or &lt;a href=&quot;http://search.msn.com/&quot; title=&quot;MSN Search&quot;&gt;MSN&lt;/a&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;title 属性是选择性的，链接名称可以用字母、数字和空格，但是不分大小写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+I start my morning with a cup of coffee and
+[The New York Times][NY Times].
+
+[ny times]: http://www.nytimes.com/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;I start my morning with a cup of coffee and
+&lt;a href=&quot;http://www.nytimes.com/&quot;&gt;The New York Times&lt;/a&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;图片&lt;/h4&gt;
+
+&lt;p&gt;图片的语法和链接很像。&lt;/p&gt;
+
+&lt;p&gt;行内形式（title 是选择性的）：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+![alt text](/path/to/img.jpg &quot;Title&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考形式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+![alt text][id]
+
+[id]: /path/to/img.jpg &quot;Title&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上面两种方法都会输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;img src=&quot;/path/to/img.jpg&quot; alt=&quot;alt text&quot; title=&quot;Title&quot; /&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;代码&lt;/h4&gt;
+
+&lt;p&gt;在一般的段落文字中，你可以使用反引号 ` 来标记代码区段，区段内的 &amp;amp;、&amp;lt; 和 &amp;gt; 都会被自动的转换成 HTML 实体，这项特性让你可以很容易的在代码区段内插入 HTML 码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;I strongly recommend against using any
+&lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
+&lt;p&gt;I wish SmartyPants used named entities like
+&lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
+entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;amp;、&amp;lt; 和 &amp;gt; 也一样会自动转成 HTML 实体。&lt;/p&gt;
+
+&lt;p&gt;Markdown 语法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+If you want your page to validate under XHTML 1.0 Strict,
+you've got to put paragraph tags in your blockquotes:
+
+&lt;blockquote&gt;
+&lt;p&gt;For example.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
+you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
+&amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
+&amp;lt;/blockquote&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;I strongly recommend against using any
+&lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
+&lt;p&gt;I wish SmartyPants used named entities like
+&lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
+entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;amp;、&amp;lt; 和 &amp;gt; 也一样会自动转成 HTML 实体。&lt;/p&gt;
+
+&lt;p&gt;Markdown 语法:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+If you want your page to validate under XHTML 1.0 Strict,
+you've got to put paragraph tags in your blockquotes:
+
+&lt;blockquote&gt;
+&lt;p&gt;For example.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;输出 HTML 为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;
+&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
+you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
+&amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
+&amp;lt;/blockquote&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+        <pubDate>Thu, 11 Aug 2016 05:10:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/08/11/%E5%8D%9A%E5%AE%A2%E8%AF%AD%E8%A8%80-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/08/11/%E5%8D%9A%E5%AE%A2%E8%AF%AD%E8%A8%80-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/</guid>
+        
+        <category>Markdown</category>
+        
+        <category>github搭建博客</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>在github上用jekyll搭建博客</title>
+        <description>
+</description>
+        <pubDate>Thu, 28 Jul 2016 04:20:00 +0800</pubDate>
+        <link>http://yhj167.github.io/2016/07/28/%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</link>
+        <guid isPermaLink="true">http://yhj167.github.io/2016/07/28/%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</guid>
+        
+        <category>github搭建博客</category>
+        
+        <category>jekyll</category>
         
         
       </item>
