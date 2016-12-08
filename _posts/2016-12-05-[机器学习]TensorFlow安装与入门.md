@@ -45,8 +45,7 @@ Reading https://pypi.python.org/simple/pip/
 
 ### 2.安装TensorFlow
 
-下载tensorflow（可以百度网盘直接下载，避免FQ）。 网盘地址： 
-https://pan.baidu.com/s/1dE2i9tn
+下载tensorflow（可以百度网盘直接下载，避免FQ）。 网盘地址：[tensorflow下载](https://pan.baidu.com/s/1dE2i9tn)。
 这一步看似比较简单，我在安装的时候就踩到了很多坑，折腾了半天才整好。在这里也主要讲解一下这里的坑。
 
 安装的时候一直报错，主要是应为需要去下载几个依赖包，其中最重要的就是six-1.10.0,这个包需要去pypi.python.org下载，起初自己下载安装了，但是还是有问题，在python 
