@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "[机器学习篇]TensorFlow安装与入门"
+title:      "[机器学习]TensorFlow安装与入门"
 subtitle:   ""
 date:       2016-12-5 20:00:00
 author:     "Yinhj"
