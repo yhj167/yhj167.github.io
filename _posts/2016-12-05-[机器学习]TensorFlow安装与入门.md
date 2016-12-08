@@ -43,7 +43,7 @@ Reading https://pypi.python.org/simple/pip/
 
 
 
-###2.安装TensorFlow
+### 2.安装TensorFlow
 
 下载tensorflow（可以百度网盘直接下载，避免FQ）。 网盘地址： 
 https://pan.baidu.com/s/1dE2i9tn
