@@ -25,7 +25,9 @@ Yinhj 的 Blog 就这麽开通了。
 
 于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，[jekyllthemes](http://jekyllthemes.org)上供下载的模板很多，[知乎](https://www.zhihu.com/question/20223939)上分享的模板也很多。编辑博客用markdown脚本来写([详细教程](http://wowubuntu.com/markdown/#list))，编辑器有很多，我比较喜欢[Typora](http://typora.io)，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！
 
-
+如果不想每次更新博客后都要提交一遍才能看效果，可以启动本地jekyll服务:
+> $ jekyll serve --watch
+然后访问http://localhost:4000，按CTRL+C退出。
 
 
 <p id = "jump"></p>

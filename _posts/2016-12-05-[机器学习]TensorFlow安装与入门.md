@@ -14,19 +14,23 @@ tags:
 ---
 
 
-​	virtualenv 可以用来建立一个专属于项目的python环境，保持一个干净的环境。只需要通过命令创建一个虚拟环境，不用的时候通过命令退出，删除。**实践证明用虚拟环境能避免很多糟心的事。**
+​    virtualenv 可以用来建立一个专属于项目的python环境，保持一个干净的环境。只需要通过命令创建一个虚拟环境，不用的时候通过命令退出，删除。**实践证明用虚拟环境能避免很多糟心的事。**
 
 下面介绍一下安装方法：
 
-安装 virtualenv
-安装 virtualenvwrapper
-安装 Numpy，Scipy，Matplotlib 等Python科学计算的库
+安装 virtualenv;
+
+安装 virtualenvwrapper;
+
+安装 Numpy，Scipy，Matplotlib 等Python科学计算的库;
 
 ### 1.安装 virtualenv
 > $ sudo pip install virtualenv
 
 然后建立一个测试目录：
+
 > $ mkdir testvirtual
+>
 > $ cd testvirtual
 
 就可以成功创建一个虚拟环境 env1：
@@ -34,9 +38,11 @@ tags:
 > $ virtualenv env1
 
 进入env1:
+
 > source env1/bin/activate
 
 退出:
+
 > deactivate
 
 ### 2.安装 virtualenvwrapper
@@ -133,8 +139,11 @@ $ workon env1
 
 **安装numpy**
 `pip install numpy`
+
 我没安装成功，然后下载后本地安装的：
-`pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl`
+```
+pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+```
 最好都本地安装，大多直接安装不成功。
 
 **安装scipy**
@@ -172,7 +181,8 @@ $ cdvirtualenv
 $ deactivate
 ```
 
-### 4.virtualenv自带pip，如果不用虚拟环境也行。安装pip方法如下：
+### 4.virtualenv自带pip，如果不用虚拟环境也行。
+安装pip方法如下：
 pip是常用的Python包管理工具，类似于Java的maven。用python的同学，都离不开pip。 
 在新mac中想用home-brew安装pip时，遇到了一些小问题：
 
@@ -211,7 +221,9 @@ Reading https://pypi.python.org/simple/pip/
 
 **最后，装完后安装tensorflow**
 
-> pip install /Users/Angela/Downloads/TensorFlow/mac/tensorflow-0.5.0-py2-none-any.whl
+```
+pip install /Users/Angela/Downloads/TensorFlow/mac/tensorflow-0.5.0-py2-none-any.whl
+```
 
 我下载的TensorFlow文件放在/Users/Angela/Downloads/目录’下了。
 

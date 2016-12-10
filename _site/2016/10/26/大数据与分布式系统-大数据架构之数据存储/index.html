@@ -10,9 +10,9 @@
     <meta name="keywords"  content="殷华杰, Yinhj殷华杰, Yinhj, 殷华杰的博客, Yinhj Blog, 博客, 个人网站, 互联网, 后端, 架构设计">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>[搭建博客]在github上用jekyll搭建博客 - 殷华杰的博客 | Yinhj Blog</title>
+    <title>[大数据与分布式系统]大数据架构之数据存储 - 殷华杰的博客 | Yinhj Blog</title>
 
-    <link rel="canonical" href="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+    <link rel="canonical" href="http://yhj167.github.io/2016/10/26/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -174,17 +174,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#jekyll" title="jekyll">jekyll</a>
-                        
-                        <a class="tag" href="/tags/#搭建博客" title="搭建博客">搭建博客</a>
+                        <a class="tag" href="/tags/#大数据与分布式系统" title="大数据与分布式系统">大数据与分布式系统</a>
                         
                     </div>
-                    <h1>[搭建博客]在github上用jekyll搭建博客</h1>
+                    <h1>[大数据与分布式系统]大数据架构之数据存储</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Yinhj on July 28, 2016</span>
+                    <span class="meta">Posted by Yinhj on October 26, 2016</span>
                 </div>
             </div>
         </div>
@@ -202,33 +200,109 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h2 id="section">前言</h2>
+				<h1 id="section">持久化存储</h1>
+<p>关键概念: 文件系统，数据库系统
+文件系统中，大量文件没有很好组织，缺乏对象之间关键，读取效率低，因此有了数据库。</p>
 
-<p>Yinhj 的 Blog 就这麽开通了。
-<a href="#jump">跳过前言</a></p>
+<p>单台计算机无法满足数据存储和处理需求，需要集群化方案，如何高效读取分布式计算机文件，高效执行分布式数据库的SQL查询，就有了NOSQL。知名分布式文件系统HDFS，分布式非关系型(非结构化)数据库Hbase和MongoDB。</p>
 
-<p>2016年，Yinhj总算有个地方可以写点自己的东西了。</p>
+<h3 id="section-1">分布式文件系统</h3>
+<p>2003年，Google发布论文GFS，启发Apache Nutch开发了HDFS。2004年，Google 又发布了论文《MapReduce: Simplified Data Processing on Large Clusters》，Doug Cutting等人实现计算框架MapReduce ，并与HDFS结合来更好的支持该框架。2006年项目从Butch搜索引擎中独立出来，成为了现在的Hadoop。</p>
 
-<p>以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。</p>
+<p>GFS隐藏了底层的负载均衡，切片备份等细节，使复杂性透明化，并提供统一的文件系统接口。其成本低，容错高，高吞吐，适合超大数据集应用场景。</p>
 
-<p>于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，<a href="http://jekyllthemes.org">jekyllthemes</a>上供下载的模板很多，<a href="https://www.zhihu.com/question/20223939">知乎</a>上分享的模板也很多。编辑博客用markdown脚本来写(<a href="http://wowubuntu.com/markdown/#list">详细教程</a>)，编辑器有很多，我比较喜欢<a href="http://typora.io">Typora</a>，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！</p>
+<p>HDFS原理: 
+1、横向扩展，增加“数据节点”就能增加容量。
+2、增加协调部门，“命名节点”维护元数据，负责文件系统的命名空间，控制外部访问，将数据块印射到数据节点。还会备份元数据从命名节点，它只与命名节点通信。
+3、数据库在多个数据节点备份。</p>
 
-<p>如果不想每次更新博客后都要提交一遍才能看效果，可以启动本地jekyll服务:</p>
-<blockquote>
-  <p>$ jekyll serve –watch
-然后访问http://localhost:4000，按CTRL+C退出。</p>
-</blockquote>
+<p>弱点:
+1.不适合实时数据访问。
+2.无法高效存储小文件，太多小文件会降低命名节点检索效率，降低系统处理速度。
+3.不支持多用户写入。
+4.不支持文件任意位置修改，只能在文件末尾追加新数据。</p>
 
-<p id="jump"></p>
-<hr />
+<h3 id="section-2">分布式数据库</h3>
+<p>Google发布论文《Bigtable: A Distributed Storage System for Structured Data》。</p>
 
-<h3 id="section-1">参考资料</h3>
+<h3 id="hbase">HBase</h3>
+<p>Hbase在HDFS基础上提供了<strong>Bigtable</strong>的能力; 并且基于<strong>列</strong>的模式进行存储。</p>
 
-<p><a href="http://blog.csdn.net/u014015972/article/details/50497254">用github + Jekyll写博客</a></p>
+<p>HBase的数据模型:
+表格
+行
+列族
+列限定符
+单元
+版本</p>
 
-<p><a href="http://www.jianshu.com/p/07064eb79740">Mac下Jekyll安装</a></p>
+<p>HBase体系结构:
+HMaster
+HRegion
+HRegion服务器</p>
 
-<p><a href="http://www.ituring.com.cn/article/114888">Jekyll+多说，建立属于你的轻博客</a></p>
+<p>HBase的列存储设计非常方便扩展，可以修改列族定义、增加列族或列限定符，所以被成为“宽表”。</p>
+
+<p>宽表模式优点：
+节省关系数据库连接操作和存储空间。
+可将不同Schema模式的数据混合，即异构数据源的统一和集成。</p>
+
+<h3 id="mongodb">MongoDB</h3>
+<p>面向集合，数据分组存储在数据集，数据集被称为集合，每个集合在数据库有唯一标识，可以包含无数文档。</p>
+
+<p>与HBase区别：
+1.数据直接存储在文件系统上，而非HDFS上。其也有大文件存储概念GridFS，由MongoDB自身实现。
+2.数据模型以文档为单位，支持多种复杂结构。文档中字段或属性不限定特定类型。
+3.单个文档不再切分和分布式存储。</p>
+
+<h1 id="section-3">非持久化存储</h1>
+<p>关键字：缓存和散列
+散列：数据的散列值作为键，待写入的数据作为值，进行key-value配对存储。散列值由散列函数(算法)得出，好的算法尽量避免散列冲突(散列值不唯一)。</p>
+
+<p>提高缓存访问命中率：
+淘汰算法:最少使用(LFU),最久未用(LRU)。</p>
+
+<h3 id="section-4">缓存系统:</h3>
+<p>Memcached, Berkeley DB, Redis。
+MongoDB也可以做缓存，Redis和Berkeley DB也支持持久化存储，没那么绝对。</p>
+
+<p>Memcached：
+基于散列映射。
+LRU。
+客户端(任何语言)通过Memcached协议 来与守护进程通信(c语言)。
+服务器端无切片和副本等分布式功能，服务器之间不通信，需要应用端实现。</p>
+
+<p>Berkeley DB(轻量级)：
+嵌入式数据库系统。
+架构简单，key-value。
+支持ACID数据库事务处理，细粒度锁，XA接口，热备份，同步复制等。
+核心不支持分布式，支持持久化。</p>
+
+<p>Redis(远程字典服务器):
+1.超高性能，每秒数十万次。
+2.支持字符串，散列表，列表，集合。
+3.支持事务性，例如a转账给b，a扣钱，b加钱，如果b未加成功，a扣的钱返还。
+4.可设定生命周期，为key-value设置生命周期(TTL)，例如验证码，限时特惠。
+5.持久化，全量保存的RDB镜像(速度快)，增量保存的AOF日志(资源消耗少，丢失少)。
+6.主从同步，从服务器利用发布/订阅机制从主服务器接收发布的记录。
+7.哨兵，自动化监控和故障恢复。
+8.适用读多写少，主服务器写，从服务器读，主服务器一旦出错，系统恢复麻烦。Redis3.0后提出了“集群”概念，包括预分片技术，对水平扩展更好的支持。</p>
+
+<h2 id="section-5">分布式存储的三种类型：</h2>
+
+<p><a href="http://www.infoq.com/cn/articles/virtual-forum-three-basic-issues-about-distributed-storage">有关分布式存储的三个基本问题</a></p>
+
+<p><a href="http://www.testlab.com.cn/Index/article/id/1082.html">文件系统vs对象存储——选型和趋势</a></p>
+
+<p><a href="https://www.zhihu.com/question/21536660">块存储、文件存储、对象存储这三者的本质差别是什么</a></p>
+
+<p>分布式存储的应用场景相对于其存储接口，现在流行分为三种:</p>
+
+<p>对象存储: 也就是通常意义的键值存储，其接口就是简单的GET、PUT、DEL和其他扩展，如七牛、又拍、Swift、S3</p>
+
+<p>块存储: 这种接口通常以QEMU Driver或者Kernel Module的方式存在，这种接口需要实现Linux的Block Device的接口或者QEMU提供的Block Driver接口，如Sheepdog，AWS的EBS，青云的云硬盘和阿里云的盘古系统，还有Ceph的RBD（RBD是Ceph面向块存储的接口）</p>
+
+<p>文件存储: 通常意义是支持POSIX接口，它跟传统的文件系统如Ext4是一个类型的，但区别在于分布式存储提供了并行化的能力，如Ceph的CephFS(CephFS是Ceph面向文件存储的接口)，但是有时候又会把GFS，HDFS这种非POSIX接口的类文件存储接口归入此类。</p>
 
 
 
@@ -239,18 +313,15 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                    data-title="[搭建博客]在github上用jekyll搭建博客"
-                    data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"
+                    data-thread-key="/2016/10/26/[大数据与分布式系统]大数据架构之数据存储"
+                    data-title="[大数据与分布式系统]大数据架构之数据存储"
+                    data-url="http://yhj167.github.io/2016/10/26/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/"
                     data-images="http://yhj167.github.io/img/post-bg-re-vs-ng2.jpg"
-                    data-content="前言
+                    data-content="持久化存储
+关键概念: 文件系统，数据库系统
+文件系统中，大量文件没有很好组织，缺乏对象之间关键，读取效率低，因此有了数据库。
 
-Yinhj 的 Blog 就这麽开通了。
-跳过前言
-
-2016年，Yinhj总算有个地方可以写点自己的东西了。
-
-以前不喜欢在大众博客网站上写东西... | 殷华杰的博客 | Yinhj Blog " >
+单台计算机无法满足数据存... | 殷华杰的博客 | Yinhj Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -269,11 +340,18 @@ Yinhj 的 Blog 就这麽开通了。
 
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/2016/10/19/C++%E7%AF%87-%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E5%AD%A6%E4%B9%A0C++-Primer%E8%BF%99%E6%9C%AC%E4%B9%A6/" data-toggle="tooltip" data-placement="top" title="[C++篇]如何正确学习C++ Primer这本书">
+                        Previous<br>
+                        <span>[C++篇]如何正确学习C++ Primer这本书</span>
+                        </a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/2016/08/11/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/" data-toggle="tooltip" data-placement="top" title="[搭建博客]Markdown语法说明">
+                        <a href="/2016/11/11/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" data-toggle="tooltip" data-placement="top" title="[大数据与分布式系统]大数据架构之数据处理">
                         Next<br>
-                        <span>[搭建博客]Markdown语法说明</span>
+                        <span>[大数据与分布式系统]大数据架构之数据处理</span>
                         </a>
                     </li>
                     
@@ -284,9 +362,9 @@ Yinhj 的 Blog 就这麽开通了。
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                        data-title="[搭建博客]在github上用jekyll搭建博客"
-                        data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" >
+                        data-thread-key="/2016/10/26/[大数据与分布式系统]大数据架构之数据存储"
+                        data-title="[大数据与分布式系统]大数据架构之数据存储"
+                        data-url="http://yhj167.github.io/2016/10/26/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

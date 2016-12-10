@@ -10,9 +10,9 @@
     <meta name="keywords"  content="殷华杰, Yinhj殷华杰, Yinhj, 殷华杰的博客, Yinhj Blog, 博客, 个人网站, 互联网, 后端, 架构设计">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>[搭建博客]在github上用jekyll搭建博客 - 殷华杰的博客 | Yinhj Blog</title>
+    <title>[大数据与分布式系统]大数据架构之数据处理 - 殷华杰的博客 | Yinhj Blog</title>
 
-    <link rel="canonical" href="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+    <link rel="canonical" href="http://yhj167.github.io/2016/11/11/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -174,17 +174,15 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#jekyll" title="jekyll">jekyll</a>
-                        
-                        <a class="tag" href="/tags/#搭建博客" title="搭建博客">搭建博客</a>
+                        <a class="tag" href="/tags/#大数据与分布式系统" title="大数据与分布式系统">大数据与分布式系统</a>
                         
                     </div>
-                    <h1>[搭建博客]在github上用jekyll搭建博客</h1>
+                    <h1>[大数据与分布式系统]大数据架构之数据处理</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Yinhj on July 28, 2016</span>
+                    <span class="meta">Posted by Yinhj on November 11, 2016</span>
                 </div>
             </div>
         </div>
@@ -202,34 +200,148 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h2 id="section">前言</h2>
-
-<p>Yinhj 的 Blog 就这麽开通了。
-<a href="#jump">跳过前言</a></p>
-
-<p>2016年，Yinhj总算有个地方可以写点自己的东西了。</p>
-
-<p>以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。</p>
-
-<p>于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，<a href="http://jekyllthemes.org">jekyllthemes</a>上供下载的模板很多，<a href="https://www.zhihu.com/question/20223939">知乎</a>上分享的模板也很多。编辑博客用markdown脚本来写(<a href="http://wowubuntu.com/markdown/#list">详细教程</a>)，编辑器有很多，我比较喜欢<a href="http://typora.io">Typora</a>，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！</p>
-
-<p>如果不想每次更新博客后都要提交一遍才能看效果，可以启动本地jekyll服务:</p>
+				<h1 id="section">离线批量处理</h1>
+<p>海量处理计算框架：</p>
 <blockquote>
-  <p>$ jekyll serve –watch
-然后访问http://localhost:4000，按CTRL+C退出。</p>
+  <p>MapReduce；
+管理框架YARN改进了MapReduce的缺点；
+计算框架Spark更迅速；
+在此基础上，还提出了hive,pig,impala,spark sql等工具。</p>
 </blockquote>
 
-<p id="jump"></p>
-<hr />
+<h3 id="mapreduce">MapReduce：</h3>
+<p>1.分割Data splitting:  数据分片发送到Mapper。
+2.映射Mapping: key-value映射。
+(合并combining ，在每个mapper节点进行本地归约)
+3.洗牌Shuffing:  将key-value的配对发给reducer归约。(可能还包括分配partitioning，例如专门的地点reducer)
+4.归约reducing：分析配对，键内容相同，则将值合并。
+<img src="http://upload-images.jianshu.io/upload_images/2886390-263caf0a7dc96a57.jpg" alt="图片发自简书App" /></p>
 
-<h3 id="section-1">参考资料</h3>
+<p><img src="http://upload-images.jianshu.io/upload_images/2886390-719c7d94608074e7.jpg" alt="图片发自简书App" /></p>
 
-<p><a href="http://blog.csdn.net/u014015972/article/details/50497254">用github + Jekyll写博客</a></p>
+<p>1.工作跟踪节点：决定处理哪些文件、为不同任务分配节点，监控所有任务运行。
+2.任务跟踪节点：从节点上运行分配的单项任务。</p>
 
-<p><a href="http://www.jianshu.com/p/07064eb79740">Mac下Jekyll安装</a></p>
+<p>缺点：
+1.工作节点完成太多功能、资源消耗，单点故障隐患。
+2.任务节点用任务数量衡量负载过于简单，map和reduce任务严格划分，可能导致系统资源未充分利用。</p>
 
-<p><a href="http://www.ituring.com.cn/article/114888">Jekyll+多说，建立属于你的轻博客</a></p>
+<h3 id="yarn">YARN:</h3>
+<p>为上层应用提供统一hadoop资源管理和调度。
+将主节点分成两个独立服务程序：全局资源管理和针对每个应用的主节点。让子任务的监测分布式处理。在YARN基础上，还可以运行spark和storm这样的流式计算和实时性作业。</p>
 
+<h3 id="spark">Spark：</h3>
+<p>基于内存计算
+弹性分布式数据集（RDD），容错机制
+适用机器学习等需要多次迭代的算法
+scala语言
+兼容HDFS和HBase等分布式存储，可以运行在YARN中。</p>
+
+<h4 id="spark-1">运用spark的公司</h4>
+<p>Hortonworks, IBM, Cloudera, MapR, Pivotal。</p>
+
+<h4 id="sparksql">sparksql</h4>
+<p>基于catalyst的交互式sql
+支持hive的多种数据格式</p>
+<h4 id="spark-streaming">spark streaming</h4>
+<p>针对实时数据流处理，可对数据进行map, reduce, join等高级操作，将结果输出到文件系统或数据库。</p>
+<h4 id="spark-graphx">spark graphX</h4>
+<p>提供用于图计算的api，定义了table和graph两种视图，有自己独自的操作符。</p>
+<h4 id="mlbase">MLBase</h4>
+<p>提供简单声明方法指定机器学习任务，动态选择较优的学习算法。</p>
+<h4 id="spark-r">spark R</h4>
+<p>开源数据分析软件，通过RDD提供的api，使用R在集群中提交并运行任务。</p>
+
+<h3 id="hive">Hive：</h3>
+<p>hadoop基础上的数据库工具，存储、查询、分析存储在HDFS中的大数据。
+1.采用HiveQL来实现数据的提取、转化和加载，将sql转化为mapreduce任务在后台运行。
+2.也可自定义开发mapper和reducer来处理內建模块无法完成的复杂工作。</p>
+
+<p>架构包括用户端、解释器、元数据存储和分析数据存储。
+1.用户端：主要包含命令行（CLI）、客户端（Client）和Web图形化界面（WebGUI）。最常用的是CLI，它启动的时候会同时启动一个Hive守护进程服务，使用者可以交互式地输入命令并得到相应的结果输出。Client是Hive的客户端，用户通过它连接到Hive的服务器。Client模式启动的时候，需要启动Hive服务器所在的节点，并进行相应的配置。WebGUI工具允许用户通过浏览器访问Hive，使用前要启动HWI组件（Hive Web Interface）。</p>
+
+<p>·解释器：主要包含执行编译器、优化器和执行器，它们完成HiveQL查询语句的词法分析、语法分析、编译、优化及计划的生成。生成的查询计划也会存储在HDFS中，并在随后通过MapReduce框架调用执行。这也体现了Hive的核心思想之一，就是尽量简化MapReduce开发的工作量，使得某些操作和查询的复杂逻辑对使用者完全透明。</p>
+
+<p>·元数据存储：Hive中的元数据包括表的名字、表的列、表分区、表数据所在的目录、是否为外部表，等等。尽管Hive采用NoSQL的方式进行工作，但它仍然使用关系型数据库存储元数据，这点主要是考虑到元数据的规模较小，而对读写同步的要求很高。此外，将元数据的存储从Hive的数据服务中解耦出来，可以大大减少执行语义检查的时间，也能提高整个系统运行的健壮性。常用的关系型数据库配置是MySQL或Derby嵌入式数据库。</p>
+
+<p>·分析数据存储：Hive用于分析的海量数据都存储在HDFS之中，支持不同的存储类型包括纯文本文件、HBase等文件。一旦解释器接受了HiveQL，那么Hive将直接读取HDFS的数据，并将查询逻辑转化成MapReduce计算来完成。</p>
+
+<p>Hive的数据模型包括几个主要概念：数据库（Database）、表（Table）、分区（Partition）和桶（Bucket）。</p>
+
+<p>·数据库：作用是将用户的应用隔离到不同的数据模式中，Hive 0.6.0之后的版本都支持数据库，相当于关系型数据库里的命名空间（Namespace）。</p>
+
+<p>·表：Hive的表和数据库中的表在概念上非常接近，在逻辑上，其由描述表格形式的元数据和存储于其中的具体数据共同组成，可以分为托管表和外部表。对托管表执行DROP命令的时候，会同时删除元数据和其中存储的数据，而对外部表执行该命令的时候，则只能删除元数据。</p>
+
+<p>·分区：Hive中的分区方式和数据库中的差异很大，它的概念是根据分区列对表中的数据进行大致地划分，表的分区在Hive存储上就体现为主目录下的多个子目录，而子目录的名称就是分区列的名称。使用分区的好处在于，查询某个具体分区列里的数据时不用进行全表扫描，可以大大加快范围内的查询。</p>
+
+<p>·桶：表和分区都是在目录级别上进行数据的拆分，而桶则是对数据源数据文件本身进行数据拆分。
+<img src="http://upload-images.jianshu.io/upload_images/2886390-611670baccbaa1e1.jpg" alt="图片发自简书App" /></p>
+
+<p>·查询语言：由于底层依赖于Hadoop的平台，因此HiveQL不支持更新操作，也不支持索引和事务，子查询和连接（Join）操作也很有限。另外，HiveQL还有些特点是关系型SQL所无法企及的，比如和MapReduce计算过程的集成和多表查询。</p>
+
+<p>·存储方式和计算模型：Hive和关系型数据库相比，存储和计算的方式也不同。Hive使用的是Hadoop的HDFS分布式文件系统和mapreduce。</p>
+
+<p>·实时性：由于架构在Hadoop之上，Hive也继承了其批处理的方式，因此在作业提交和调度的时候需要大量的开销，并且不能在大规模数据集上实现低延迟地快速查询，自然相较于关系型数据库而言其实时性就较差了。</p>
+
+<p>·扩展性、并行性和容错性：好。</p>
+
+<h3 id="pig-impala-spark-sql">Pig, Impala, SPARK SQL：</h3>
+<p>有些开发者，虽然对SQL不甚理解，但是擅于MapReduce的编程。<a href="http://pig.apache.org">Pig</a>就是在这样的背景下应运而生的，Pig为大型数据集的处理提供了更高层次的抽象，以及更丰富的数据结构。</p>
+
+<p>另一个执行于现有Hadoop基础设施上的互动SQL查询引擎是Impala，它是Cloudera公司主导开发的查询系统，目前的最新版本是2.1。类似Apache Hive，Impala也能通过类SQL的语言查询存储在HDFS和HBase中的PB级大数据。不过，Impala考虑了实时性更强的需求，为了实现这一点，Impala参考了Google的交互式数据分析系统Dremel。Impala使用Parquet实现了列存储，并借鉴了MPP并行数据库的思想。同时，它采用HiveQL和JDBC等接口，进行全局统一的元数据存储和读取。对于用户查询则是直接进行分布式处理，在HDFS或HBase上本地读写，因此具有良好的扩展性和容错性。此外，由于放弃了MapReduce的运行框架，它也没有MapReduce作业启动、洗牌、排序等开销，无须将中间结果写入磁盘，节省了大量的I/O开销，也降低了网络传输的数据量。当然，Impala并不是用来取代现有的MapReduce框架的，而是作为MapReduce的一个强力补充。一般而言，Impala更适合处理输出数据较小的查询请求，而对于大数据量的批处理任务，MapReduce依然是更好的选择。</p>
+
+<p>Spark SQL，它是基于Catalyst引擎的交互式SQL技术，主要优化了以下几个方面。</p>
+
+<p>·执行策略：Spark SQL在Hive兼容层面仅仅依赖于HiveQL解析器和元数据存储。从HiveQL被解析成抽象语法树之后，就全部由Spark SQL来接管了。执行计划的生成和优化均由Catalyst引擎来负责，借助Scala的模式匹配等函数式语言的特性，其策略比Hive更为简洁。</p>
+
+<p>·进入门槛：Spark SQL能够对原生RDD对象进行关系查询，因此大大降低了用户门槛。虽然在很多方面Spark的性能优于Hadoop的MapReduce，但其运行模型也比MapReduce精细不少，这就使得Spark应用的性能调优比较复杂。单纯使用Spark的接口开发是需要花些学习成本的。这时就体现出了Spark SQL的优势——相比底层接口，SQL语言的接受程度更高，这和Hive相对于MapReduce的情况类似。更何况Catalyst引擎还提供了一系列常见的优化策略来协助用户实现目标。</p>
+
+<p>·对Hive的依赖：相对于Shark，Spark SQL进一步削减了对Hive的依赖，不再需要自行维护打了补丁的Hive分支。因此，Shark后续将全面采用Spark SQL作为引擎，而不仅仅是查询优化方面。</p>
+
+<h1 id="section-1">提升及时性：消息机制</h1>
+<p>两种模型：点对点、发布订阅模型。
+无论是哪种消息传送模式，都可以提升数据更新的及时性，并对复杂的系统架构进行解耦。举个例子，对于重点观察的用户行为，如果还是通过Flume这样的批量采集方式，可能无法达到业务方提出的实时监控和分析的需求。而消息的机制可以很好地解决这个问题。另外，由于消息机制的实时性更强，通常它还会和稍后介绍的Spark Streaming、Storm这样的流式计算结合起来使用。
+ApacheMQ：
+ActiveMQ的主要目标是在尽可能多的跨平台和跨语言上提供一个统一的、标准的消息驱动的应用集成。
+ActiveMQ同样以异步的形式提供松耦合的应用架构。
+JMS规范保证了同步和异步消息传递、一次和仅一次的传递、对于订阅者的消息持久化，等等。基于JMS规范使得ActiveMQ和其他消息提供者拥有类似的基本特性。
+支持多种连接协议：ActiveMQ提供了各种连接选择，包括HTTP、HTTPS、SSL、TCP、UDP、XMPP、IP多点传送等。
+ActiveMQ既支持标准的JDBC方案，也可以通过KahaDB提供超快的持久方案。
+多个ActiveMQ代理可以通过代理网络（Network of Brokers）进行联合的工作。
+ActiveMQ提供了各种简便而又强大的管理方式，除了Java语言中最基本的JConsole，还有ActiveMQ Web Console、消息报告和各种系统日志等。</p>
+
+<p>Kafka：
+·高性能存储：通过特别设计的磁盘数据结构，保证时间复杂度为O（1）的消息持久化，这样数以TB的消息存储也能够保持良好的稳定性能。此外，被保存的消息可以多次被消费，用于商务智能ETL和其他一些实时应用程序。
+·天生分布式：Kafka被设计为一个分布式系统，它利用ZooKeeper来管理多个代理（Broker），支持负载均衡和副本机制，易于横向地扩展。ZooKeeper旨在构建可靠的、分布式的数据结构，这里用于管理和协调Kafka代理。当系统中新增了代理，或者某个代理故障失效时，ZooKeeper服务会通知生产者和消费者，让它们据此开始与其他代理协调工作。
+·高吞吐量：由于存储性能的大幅提升，以及良好的横向扩展性，因此即使是非常普通的硬件Kafka也可以支持每秒数十万的消息流，同时为发布和订阅提供惊人的吞吐量。
+·无状态代理：与其他消息系统不同，Kafka代理是无状态的。代理不会记录消息被消费的状态，而是需要消费者各自维护。
+·主题（Topic）和分区（Partition）：支持通过Kafka服务器和消费机集群来分区消息。一个主题可以认为是一类消息，而每个主题可以分成多个分区。通过分区，可以将数据分散到多个服务器上，避免达到单机瓶颈。更多的分区意味着可以容纳更多的消费者，有效提升并发消费的能力。基于副本方案，还能够对多个分区进行备份和调度。
+·消费者分组（Consumer Group）：Kafka中每个消费者均属于一个分组，每个分组中可以有多个消费者。主题中的某条消息可以被多个分组获得，不过同一分组中，只有一个消费者会获得该消息。</p>
+
+<p>考虑到重复接收数据总比丢失数据要好，通常情况下Kafka的“至少一次”机制是使用者的首选。整体而言，对于一些常规的消息系统，Kafka是个理想的选择。内在的分布式设计、分区和副本，使得其具有良好的扩展性、容错性和性能优势。不过，目前Kafka并没有提供JMS中的事务性消息传输，无法严格地保证消息一定被处理，或者只被处理一次，适合那些对一致性要求不高的应用场景。
+<img src="http://upload-images.jianshu.io/upload_images/2886390-83d077b95bd3f60d.jpg" alt="kafka架构" /></p>
+
+<h1 id="section-2">在线实时处理：</h1>
+<p>Storm：
+Storm为分布式实时计算提供了一组通用原语，这是管理队列及工作者集群的另一种方式。在计算时就将结果以流的形式输出给用户，从而进一步提升实时性。</p>
+
+<p>·元组：这是Storm中使用的一种数据结构，包含了若干个键–值对（Key-Value Pair）的列表，这里的键–值对的定义和第3章散列表中所提到的类似。元组以一种分布式的方式并行地在Storm集群上进行创建和处理。
+·数据流：数据流是Storm中非常重要的一个抽象概念，是一个没有边界的元组序列，由Spout和Bolt进行发送和转发。对数据流的定义主要就是对其中的元组进行定义，此外还需要为其分配唯一的标识ID。
+·Spout：英文单词Spout翻译过来就是水龙头的意思，顾名思义它是提供数据源的，是一个计算任务中数据的生产者。Spout可以从数据库或文件系统等加载数据，然后作为入口，向由若干节点组成的拓扑结构中发送数据流。每个Spout都可以发送多个数据流，同时也可以按照送达的可靠性划分等级。
+·Bolt：可以将其理解为运算或函数，用于将一个或多个数据流作为输入，实施加工处理后，再进行新数据流的输出。Bolt可以接受Spout或其他Bolt发送的数据，并据此建立复杂的流转网络，形成最终的拓扑结构，完成对整条流水线数据的操作。Storm计算中的逻辑几乎都在Bolt中完成，例如过滤、分类、聚集、计算、查询数据库等。
+·流量分组：它决定了Spout和Bolt节点之间相互连接的方式，主要分为以下几种类型。
+·洗牌分组（Shuffle Grouping）：随机地将元组分发到各个Bolt上，理论上这样做的结果是每个Bolt都会接收到同样数量的元组。
+·按字段值分组（Fields Grouping）：按照指定的元组字段来进行分组。例如，按照“水质”来划分，那么具有同等质量的水源会被分到一组，发送到同一个或同一组Bolt上。这个逻辑和Hadoop中的MapReduce框架非常相似，这样一来，数据流上游的Spout或Bolt节点就和Mapper比较接近，而下游的Bolt节点则和Reducer比较接近。
+·广播（All）：所有的元组都会发送到所有的Bolt上。
+·全局（Global）：所有的元组都发送到全局指定的某个Bolt上。
+·不做指定（None）：目前等同于洗牌分组，将来可能会进行新的定义扩充。
+·指定分组（Direct）：明确指定元组发送到哪个确切的Bolt上。
+·拓扑结构：它是由流量分组连接起来的Spout和Bolt节点网络。在Storm中，一个实时计算应用程序的逻辑被封装在一个拓扑对象中，也可以称为计算拓扑。如果和Hadoop的生态系统对比，拓扑结构类似于MapReduce的任务，但是它们之间的关键区别在于，一个MapReduce任务最终总是会结束的，然而一个Storm的拓扑结构会一直运行，直到使用者主动关闭或出现异常。
+<img src="http://upload-images.jianshu.io/upload_images/2886390-28690344b97f50b5.jpg" alt="图片发自简书App" /></p>
+
+<p>SparkStreaming：
+Spark Streaming会把每块数据作为一个RDD，每个块都会生成一个Spark的任务来进行处理，最终结果也会返回多块。由于使用了这种设计模式，因此Spark Streaming可以同时兼容批量和实时数据的处理逻辑，以便于历史数据的融合。
+Spark Streaming是处理某个时间段窗口内的事件，而Storm处理的是每次传入的单个事件，理论上Spark Streaming的延时性要比Storm略高。不过RDD的机制赋予了Spark Streaming更高的灵活性和容错性。在Storm中，每个单独的记录通过系统时必须被跟踪，这样Storm才能够保证每个记录至少被处理一次。但是在从错误中恢复过来的时候Storm允许出现重复记录，这就意味着某些状态可能被错误地更新多次。而Spark Streaming只需要在批量级别进行跟踪处理，即便一个节点发生故障，也可以有效地保证每个时间窗内的小量数据被完整地处理一次。</p>
 
 
                 <hr>
@@ -239,18 +351,17 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                    data-title="[搭建博客]在github上用jekyll搭建博客"
-                    data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"
+                    data-thread-key="/2016/11/11/[大数据与分布式系统]大数据架构之数据处理"
+                    data-title="[大数据与分布式系统]大数据架构之数据处理"
+                    data-url="http://yhj167.github.io/2016/11/11/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"
                     data-images="http://yhj167.github.io/img/post-bg-re-vs-ng2.jpg"
-                    data-content="前言
+                    data-content="离线批量处理
+海量处理计算框架：
 
-Yinhj 的 Blog 就这麽开通了。
-跳过前言
-
-2016年，Yinhj总算有个地方可以写点自己的东西了。
-
-以前不喜欢在大众博客网站上写东西... | 殷华杰的博客 | Yinhj Blog " >
+  MapReduce；
+管理框架YARN改进了MapReduce的缺点；
+计算框架Spark更迅速；
+在此基础上，还... | 殷华杰的博客 | Yinhj Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -269,11 +380,18 @@ Yinhj 的 Blog 就这麽开通了。
 
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/2016/10/26/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" data-toggle="tooltip" data-placement="top" title="[大数据与分布式系统]大数据架构之数据存储">
+                        Previous<br>
+                        <span>[大数据与分布式系统]大数据架构之数据存储</span>
+                        </a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/2016/08/11/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/" data-toggle="tooltip" data-placement="top" title="[搭建博客]Markdown语法说明">
+                        <a href="/2016/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%BC%80%E6%BA%90%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" data-toggle="tooltip" data-placement="top" title="[机器学习]开源的深度学习框架">
                         Next<br>
-                        <span>[搭建博客]Markdown语法说明</span>
+                        <span>[机器学习]开源的深度学习框架</span>
                         </a>
                     </li>
                     
@@ -284,9 +402,9 @@ Yinhj 的 Blog 就这麽开通了。
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                        data-title="[搭建博客]在github上用jekyll搭建博客"
-                        data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" >
+                        data-thread-key="/2016/11/11/[大数据与分布式系统]大数据架构之数据处理"
+                        data-title="[大数据与分布式系统]大数据架构之数据处理"
+                        data-url="http://yhj167.github.io/2016/11/11/%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%9E%B6%E6%9E%84%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->

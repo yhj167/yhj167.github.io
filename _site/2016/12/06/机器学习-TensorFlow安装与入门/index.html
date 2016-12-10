@@ -10,9 +10,9 @@
     <meta name="keywords"  content="殷华杰, Yinhj殷华杰, Yinhj, 殷华杰的博客, Yinhj Blog, 博客, 个人网站, 互联网, 后端, 架构设计">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>[搭建博客]在github上用jekyll搭建博客 - 殷华杰的博客 | Yinhj Blog</title>
+    <title>[机器学习]TensorFlow安装与入门 - 殷华杰的博客 | Yinhj Blog</title>
 
-    <link rel="canonical" href="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
+    <link rel="canonical" href="http://yhj167.github.io/2016/12/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-TensorFlow%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -174,17 +174,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#jekyll" title="jekyll">jekyll</a>
+                        <a class="tag" href="/tags/#TensorFlow" title="TensorFlow">TensorFlow</a>
                         
-                        <a class="tag" href="/tags/#搭建博客" title="搭建博客">搭建博客</a>
+                        <a class="tag" href="/tags/#机器学习" title="机器学习">机器学习</a>
                         
                     </div>
-                    <h1>[搭建博客]在github上用jekyll搭建博客</h1>
+                    <h1>[机器学习]TensorFlow安装与入门</h1>
                     
                     
                     <h2 class="subheading"></h2>
                     
-                    <span class="meta">Posted by Yinhj on July 28, 2016</span>
+                    <span class="meta">Posted by Yinhj on December 6, 2016</span>
                 </div>
             </div>
         </div>
@@ -202,33 +202,259 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<h2 id="section">前言</h2>
+				<p>​    virtualenv 可以用来建立一个专属于项目的python环境，保持一个干净的环境。只需要通过命令创建一个虚拟环境，不用的时候通过命令退出，删除。<strong>实践证明用虚拟环境能避免很多糟心的事。</strong></p>
 
-<p>Yinhj 的 Blog 就这麽开通了。
-<a href="#jump">跳过前言</a></p>
+<p>下面介绍一下安装方法：</p>
 
-<p>2016年，Yinhj总算有个地方可以写点自己的东西了。</p>
+<p>安装 virtualenv;</p>
 
-<p>以前不喜欢在大众博客网站上写东西，一是感觉不好用，二是我们单位上不了外网-_-!!!。总之写点东西非常麻烦，导致实践中没有很好地形成总结，这样对长期的自身发展来说不好，实践中的一些思考过一阵又忘了，缺少积累。</p>
+<p>安装 virtualenvwrapper;</p>
 
-<p>于是周末花了两天时间，在github上建了自己的博客，但是要写一个漂亮的博客还需要漂亮的模板，看上了基于jekyll和hexo实现的两种模板，前者基于ruby实现，后者基于node.js实现。个人还是喜欢jekyll，<a href="http://jekyllthemes.org">jekyllthemes</a>上供下载的模板很多，<a href="https://www.zhihu.com/question/20223939">知乎</a>上分享的模板也很多。编辑博客用markdown脚本来写(<a href="http://wowubuntu.com/markdown/#list">详细教程</a>)，编辑器有很多，我比较喜欢<a href="http://typora.io">Typora</a>，即写即现。主要的时间还是花在模板移植上了，环境安装和修改，第一次还是花了不少时间！</p>
+<p>安装 Numpy，Scipy，Matplotlib 等Python科学计算的库;</p>
 
-<p>如果不想每次更新博客后都要提交一遍才能看效果，可以启动本地jekyll服务:</p>
+<h3 id="virtualenv">1.安装 virtualenv</h3>
 <blockquote>
-  <p>$ jekyll serve –watch
-然后访问http://localhost:4000，按CTRL+C退出。</p>
+  <p>$ sudo pip install virtualenv</p>
 </blockquote>
 
-<p id="jump"></p>
+<p>然后建立一个测试目录：</p>
+
+<blockquote>
+  <p>$ mkdir testvirtual</p>
+
+  <p>$ cd testvirtual</p>
+</blockquote>
+
+<p>就可以成功创建一个虚拟环境 env1：</p>
+
+<blockquote>
+  <p>$ virtualenv env1</p>
+</blockquote>
+
+<p>进入env1:</p>
+
+<blockquote>
+  <p>source env1/bin/activate</p>
+</blockquote>
+
+<p>退出:</p>
+
+<blockquote>
+  <p>deactivate</p>
+</blockquote>
+
+<h3 id="virtualenvwrapper">2.安装 virtualenvwrapper</h3>
+
+<p>Virtaulenvwrapper是virtualenv的扩展包，可以更方便地新增，删除，复制，切换虚拟环境。</p>
+
+<p>运行下面命令就安装成功了，默认安装在 /usr/local/bin下面：</p>
+
+<blockquote>
+  <p>$ sudo easy_install virtualenvwrapper</p>
+</blockquote>
+
+<p>接下来创建一个文件夹，用来存放所有的虚拟环境：</p>
+
+<blockquote>
+  <p>$ mkdir ~/workspaces</p>
+
+  <p>$ cd ~/workspaces</p>
+</blockquote>
+
+<p>但是在使用virtualenvwrapper之前，要运行virtualenvwrapper.sh文件，需要设置环境变量，vim  ~/.bashrc打开配置文件，把下面两行代码加上，<strong>但是mac比较特殊直接写不管用</strong>。</p>
+
+<blockquote>
+  <p>export WORKON_HOME=~/workspaces</p>
+
+  <p>source /usr/local/bin/virtualenvwrapper.sh</p>
+</blockquote>
+
+<p>因为<strong>unix下当shell是login shell，.bash_profile才加载，而.bashrc相反</strong>。
+Linux下，打开终端terminal是non-login shell。
+OSX下，运行Terminal.app是一个login shell，所以.bash_profile会加载，而bashrc不会加载。</p>
+
+<p>直接在命令行写也可以，但是每次启动shell都要手动输入很麻烦，下面是解决方法是 vim ~/.bash_profile打开配置文件把下面代码加上：</p>
+
+<blockquote>
+  <p>if [ “${BASH-no}” != “no” ]; then</p>
+
+  <p>​	[ -r ~/.bashrc ] &amp;&amp; . ~/.bashrc</p>
+
+  <p>fi</p>
+</blockquote>
+
+<p>接下来，创建一个或者多个虚拟环境 env1，env2：</p>
+
+<blockquote>
+  <p>$ mkvirtualenv env1</p>
+</blockquote>
+
+<p>成功后，当前路径前面就会有 (env1)</p>
+
+<blockquote>
+  <p>$ mkvirtualenv env2</p>
+</blockquote>
+
+<h4 id="section">下面是一些基本操作命令</h4>
+
+<p>列出虚拟环境：</p>
+
+<blockquote>
+  <p>$ lsvirtualenv -b</p>
+</blockquote>
+
+<blockquote>
+  <p>env1</p>
+
+  <p>env2</p>
+</blockquote>
+
+<p>切换虚拟环境：</p>
+
+<blockquote>
+  <p>$ workon env1</p>
+</blockquote>
+
+<p>查看环境里安装了哪些包：</p>
+
+<blockquote>
+  <p>$ lssitepackages</p>
+</blockquote>
+
+<p>进入当前环境：</p>
+
+<blockquote>
+  <p>$ cdvirtualenv</p>
+</blockquote>
+
+<p>进入当前环境的site-packages：</p>
+
+<blockquote>
+  <p>$ cdsitepackages</p>
+
+  <p>$ cdsitepackages pip</p>
+</blockquote>
+
+<p>复制虚拟环境：</p>
+
+<blockquote>
+  <p>$ cpvirtualenv env1 env3</p>
+
+  <p>Copying env1 as env3…</p>
+</blockquote>
+
+<p>退出虚拟环境：</p>
+
+<blockquote>
+  <p>$ deactivate</p>
+</blockquote>
+
+<p>删除虚拟环境：</p>
+
+<blockquote>
+  <p>$ rmvirtualenv env2</p>
+</blockquote>
+
+<blockquote>
+  <p>Removing env2…</p>
+</blockquote>
+
+<h3 id="numpyscipymatplotlib-">3.安装 Numpy，Scipy，Matplotlib 等</h3>
+
+<p>接下来安装Python的各种包，就比较顺畅了，比如安在env1上：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ workon env1
+</code></pre>
+</div>
+
+<p><strong>安装numpy</strong>
+<code class="highlighter-rouge">pip install numpy</code></p>
+
+<p>我没安装成功，然后下载后本地安装的：</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
+</code></pre>
+</div>
+<p>最好都本地安装，大多直接安装不成功。</p>
+
+<p><strong>安装scipy</strong>
+<code class="highlighter-rouge">$ pip install scipy</code></p>
+
+<p><strong>安装matplotlib</strong>
+<code class="highlighter-rouge">$ pip install matplotlib</code></p>
+
+<p><strong>安装ipython</strong>
+<code class="highlighter-rouge">$ pip install ipython[all]</code></p>
+
+<p><strong>安装pandas</strong>
+<code class="highlighter-rouge">$ pip install pandas</code></p>
+
+<p><strong>安装Statsmodel</strong>
+<code class="highlighter-rouge">$ pip install statsmodel</code></p>
+
+<p><strong>安装scikit-learn</strong>
+<code class="highlighter-rouge">$ pip install scikit-learn</code></p>
+
+<p>按照顺序全部安装成功，后续就可以在虚拟环境上做分析了。</p>
+
 <hr />
 
-<h3 id="section-1">参考资料</h3>
+<p>以后每次进入虚拟环境就执行如下代码即可：</p>
 
-<p><a href="http://blog.csdn.net/u014015972/article/details/50497254">用github + Jekyll写博客</a></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>$ workon env1
+$ cdvirtualenv
+</code></pre>
+</div>
 
-<p><a href="http://www.jianshu.com/p/07064eb79740">Mac下Jekyll安装</a></p>
+<p>退出虚拟环境就用</p>
 
-<p><a href="http://www.ituring.com.cn/article/114888">Jekyll+多说，建立属于你的轻博客</a></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>$ deactivate
+</code></pre>
+</div>
+
+<h3 id="virtualenvpip">4.virtualenv自带pip，如果不用虚拟环境也行。</h3>
+<p>安装pip方法如下：
+pip是常用的Python包管理工具，类似于Java的maven。用python的同学，都离不开pip。 
+在新mac中想用home-brew安装pip时，遇到了一些小问题：</p>
+
+<pre><code>
+bogon:~ wanglei$ brew install pip
+Error: No available formula with the name "pip"
+Homebrew provides pip via: `brew install python`. However you will then
+have two Pythons installed on your Mac, so alternatively you can install
+pip via the instructions at:
+
+  https://pip.readthedocs.org/en/stable/installing/#install-pip
+</code></pre>
+
+<p>由此可见，在home-brew中，pip的安装是跟python一起的。</p>
+
+<p>换种方式：</p>
+
+<pre><code>
+bogon:~ wanglei$ sudo easy_install pip
+Password:
+Searching for pip
+Reading https://pypi.python.org/simple/pip/
+...
+</code></pre>
+
+<p>稍等片刻，pip就安装完毕</p>
+
+<h3 id="tensorflow">5.安装TensorFlow</h3>
+
+<p>下载tensorflow（可以百度网盘直接下载，避免FQ）。 网盘地址：<a href="https://pan.baidu.com/s/1dE2i9tn">tensorflow下载</a>。</p>
+
+<p>一些依赖包如果安装不顺畅，可以去pypi.python.org直接下载，比如numpy我没安装上，下载包后本地安装上了。</p>
+
+<p>直接安装依赖包会遇到很多坑，比如和现有版本冲突等安装失败。可以安装virtualenv来隔离环境，会自动安装six-1.10等很多依赖包，之后就可以安装Numpy、Scipy、Matplotlib 等库。</p>
+
+<p><strong>最后，装完后安装tensorflow</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pip install /Users/Angela/Downloads/TensorFlow/mac/tensorflow-0.5.0-py2-none-any.whl
+</code></pre>
+</div>
+
+<p>我下载的TensorFlow文件放在/Users/Angela/Downloads/目录’下了。</p>
 
 
 
@@ -239,18 +465,11 @@
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                    data-title="[搭建博客]在github上用jekyll搭建博客"
-                    data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"
+                    data-thread-key="/2016/12/06/[机器学习]TensorFlow安装与入门"
+                    data-title="[机器学习]TensorFlow安装与入门"
+                    data-url="http://yhj167.github.io/2016/12/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-TensorFlow%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8/"
                     data-images="http://yhj167.github.io/img/post-bg-re-vs-ng2.jpg"
-                    data-content="前言
-
-Yinhj 的 Blog 就这麽开通了。
-跳过前言
-
-2016年，Yinhj总算有个地方可以写点自己的东西了。
-
-以前不喜欢在大众博客网站上写东西... | 殷华杰的博客 | Yinhj Blog " >
+                    data-content="​    virtualenv 可以用来建立一个专属于项目的python环境，保持一个干净的环境。只需要通过命令创建一个虚拟环境，不用的时候通过命令退出，... | 殷华杰的博客 | Yinhj Blog " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -269,13 +488,13 @@ Yinhj 的 Blog 就这麽开通了。
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2016/08/11/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-Markdown%E8%AF%AD%E6%B3%95%E8%AF%B4%E6%98%8E/" data-toggle="tooltip" data-placement="top" title="[搭建博客]Markdown语法说明">
-                        Next<br>
-                        <span>[搭建博客]Markdown语法说明</span>
+                    <li class="previous">
+                        <a href="/2016/11/21/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%BC%80%E6%BA%90%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/" data-toggle="tooltip" data-placement="top" title="[机器学习]开源的深度学习框架">
+                        Previous<br>
+                        <span>[机器学习]开源的深度学习框架</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
 
@@ -284,9 +503,9 @@ Yinhj 的 Blog 就这麽开通了。
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="/2016/07/28/[搭建博客]在github上用jekyll搭建博客"
-                        data-title="[搭建博客]在github上用jekyll搭建博客"
-                        data-url="http://yhj167.github.io/2016/07/28/%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2-%E5%9C%A8github%E4%B8%8A%E7%94%A8jekyll%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/" >
+                        data-thread-key="/2016/12/06/[机器学习]TensorFlow安装与入门"
+                        data-title="[机器学习]TensorFlow安装与入门"
+                        data-url="http://yhj167.github.io/2016/12/06/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-TensorFlow%E5%AE%89%E8%A3%85%E4%B8%8E%E5%85%A5%E9%97%A8/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
