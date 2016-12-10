@@ -141,6 +141,7 @@ $ workon env1
 `pip install numpy`
 
 我没安装成功，然后下载后本地安装的：
+
 ```
 pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
 ```
