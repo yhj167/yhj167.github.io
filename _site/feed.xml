@@ -5,8 +5,8 @@
     <description>关于后端与架构、分布式与大数据 | 殷华杰，Web &amp; 后端开发，分布式架构设计 | 这里是 @Yinhj殷华杰 的个人博客，与你一起发现更大的世界。</description>
     <link>http://yhj167.github.io/</link>
     <atom:link href="http://yhj167.github.io/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 10 Dec 2016 23:46:24 +0800</pubDate>
-    <lastBuildDate>Sat, 10 Dec 2016 23:46:24 +0800</lastBuildDate>
+    <pubDate>Sun, 11 Dec 2016 00:13:18 +0800</pubDate>
+    <lastBuildDate>Sun, 11 Dec 2016 00:13:18 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -180,6 +180,7 @@ OSX下，运行Terminal.app是一个login shell，所以.bash_profile会加载�
 &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install numpy&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;我没安装成功，然后下载后本地安装的：&lt;/p&gt;
+
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;

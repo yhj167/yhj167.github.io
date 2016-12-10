@@ -15,8 +15,6 @@ RSS: false
 weibo_username:     5019648981
 zhihu_username:     yinhj
 github_username:    yhj167
-#twitter_username:  simba2010@qq.com
-facebook_username:  simba2010@qq.com
 linkedin_username:  simba2010
 
 
@@ -80,7 +78,7 @@ featured-condition-size: 0              # A tag will be featured if the size of 
 
 
 
-# Friends
+# Links
 friends: [
     {
         title: "sunxiaobiu",
@@ -88,9 +86,6 @@ friends: [
     },{
         title: "xxgblog",
         href: "http://xxgblog.com"
-    },{
-        title: "walken",
-        href: "htpp://walken.github.io"
     }
 
 
