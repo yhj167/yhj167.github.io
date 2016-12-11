@@ -145,7 +145,24 @@ $ workon env1
 ```
 pip install /Users/Angela/Downloads/numpy-1.11.2-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl
 ```
-最好都本地安装，大多直接安装不成功。
+
+最好都本地安装，大多直接安装不成功。如果在线安装超时，可以建个文件：
+
+```
+mkdir ~/.pip
+vim ~/.pip/pip.conf
+```
+
+内容如下，设置超时时间和指定源：
+
+```
+[global]
+timeout = 6000
+index-url = http://e.pypi.python.org/simple
+[install]
+use-mirrors = true
+mirrors = http://e.pypi.python.org
+```
 
 **安装scipy**
 `$ pip install scipy`
